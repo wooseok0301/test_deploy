@@ -1,0 +1,86 @@
+.container {
+  margin: 40px 0 0 100px !important;
+  padding-left: 20px;
+  padding-right: 50px;
+  max-width: 600px;
+  background: #fff;
+  color: #000;
+}
+
+.placeholder {
+  color: #666;
+  font-size: 14px;
+}
+
+.uploadBtn {
+  background: #fff;
+  color: #000;
+  border-radius: 0;
+  border: 1px solid #ccc;
+  padding: 8px 22px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: background 0.18s;
+}
+
+.uploadBtn:hover {
+  background: #f0f0f0;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  width: 58px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  background: #fff;
+  color: #000;
+  font-size: 15px;
+}
+
+.modifyBtn {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 7px 17px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.modifyBtn:hover {
+  background: #f0f0f0;
+}
+
+.yearSelector {
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+  gap: 8px; /* 버튼 간격 */
+  padding: 10px 0;
+  max-width: 150px;
+}

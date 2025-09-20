@@ -376,3 +376,20 @@
   color: #000;
   border: 1px solid #ccc;
 }
+
+.editProfileButton {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.692);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.editProfileButton:hover {
+  background-color: #13131349;
+}

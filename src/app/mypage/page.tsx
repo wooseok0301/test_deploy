@@ -349,6 +349,12 @@ export default function MyPage() {
           <p className={styles.joinDate}>
             가입일: {userData.createdAt.toDate().toLocaleDateString()}
           </p>
+          <button
+            className={styles.editProfileButton}
+            onClick={() => router.push('/mypage_modi')}
+          >
+            프로필 수정
+          </button>
         </div>
       </div>
 
