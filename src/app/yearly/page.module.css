@@ -1,33 +1,114 @@
+/* Updated yearSelector styles */
 .yearSelector {
   display: flex;
-  justify-content: flex-start;
-  gap: 1rem;
+  flex-direction: column; /* Changed to column for grouped years */
+  gap: 8px; /* Gap between year groups */
+  align-items: flex-start; /* Align groups to the left */
   margin-bottom: 3rem;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 10px;
+  padding: 0 1rem; /* Adjust padding for better visual alignment */
 }
 
+/* Base button style for both group and individual year buttons */
 .yearButton {
-  flex-shrink: 0;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: 2px solid #000;
-  background: none;
-  color: #000;
-  border-radius: 20px;
+  width: 100%; /* Take full width of its container (group or main yearSelector) */
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  color: #222;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  text-align: left;
+  transition: background 0.12s ease, color 0.12s ease, font-weight 0.12s ease;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
-.yearButton:hover {
-  background-color: #000;
-  color: white;
-}
-
+/* Style for the active year button */
 .yearButton.active {
-  background-color: #000;
-  color: white;
+  background: #222; /* Dark background for active year */
+  color: #fff; /* White text for active year */
+  font-weight: bold;
+}
+
+/* Hover effect for all year buttons */
+.yearButton:hover {
+  background: #ededed;
+  color: #222; /* Ensure text color is readable on hover */
+}
+
+/* Specific styles for year group buttons (the '2020~2024' buttons) */
+.yearGroupButton {
+  font-weight: normal; /* Default for group buttons */
+  background: transparent;
+  color: #222;
+}
+
+/* Active style for the year group button when its group is open */
+.yearGroupButton.activeGroup {
+  font-weight: bold;
+  background: #e0e0e0; /* Slightly darker background for active group button */
+}
+
+/* Hover effect for year group buttons */
+.yearGroupButton:hover {
+  background: #ededed;
+}
+
+/* Styles for the container of individual years within a group */
+.yearSubList {
+  margin-left: 15px; /* Indent individual years */
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Smaller gap between individual year buttons */
+  width: calc(100% - 15px); /* Adjust width to account for margin */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .yearSelector {
+    flex-direction: row; /* Back to row for mobile */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px; /* Space for scrollbar */
+    gap: 1rem; /* Gap between buttons in row mode */
+    align-items: center; /* Center buttons vertically in row mode */
+    margin-bottom: 2rem;
+  }
+  .yearButton {
+    width: auto; /* Allow buttons to size based on content */
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #000;
+    background: none;
+    color: #000;
+    border-radius: 20px; /* Pill shape for individual buttons on mobile */
+    text-align: center; /* Center text in mobile buttons */
+  }
+  .yearButton.active {
+    background-color: #000;
+    color: white;
+  }
+  .yearButton:hover {
+    background-color: #000;
+    color: white;
+  }
+
+  /* Reset grouped year specific styles for mobile */
+  .yearGroupButton, .yearGroupButton.activeGroup {
+    font-weight: normal;
+    background: none;
+    color: #000;
+    border-radius: 20px;
+    border: 2px solid #000;
+  }
+  .yearGroupButton:hover {
+    background-color: #000;
+    color: white;
+  }
+  .yearSubList {
+    display: none; /* Hide sub-lists on mobile, switch to flat list */
+  }
 }
 
 .bannerImage {
