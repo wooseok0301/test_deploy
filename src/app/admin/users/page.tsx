@@ -161,21 +161,19 @@ export default function UserManagement() {
       )
       await Promise.all(deleteCommentPromises)
 
-      // 3. 해당 사용자가 좋아요한 게시물에서 좋아요 제거
-      const allPostsQuery = query(collection(db, 'posts'))
-      const allPostsSnapshot = await getDocs(allPostsQuery)
-      const updateLikesPromises = allPostsSnapshot.docs
-        .filter((doc) => {
-          const data = doc.data()
-          return data.likes && data.likes.includes(email)
-        })
-        .map((doc) => {
-          const data = doc.data()
-          const updatedLikes = data.likes.filter(
-            (like: string) => like !== email
-          )
-          return updateDoc(doc.ref, { likes: updatedLikes })
-        })
+      // 3. 해당 사용자가 좋아요한 게시물에서 좋아요 제거 (array-contains로 선별)
+      const likedByUserQuery = query(
+        collection(db, 'posts'),
+        where('likes', 'array-contains', email)
+      )
+      const likedByUserSnapshot = await getDocs(likedByUserQuery)
+      const updateLikesPromises = likedByUserSnapshot.docs.map((doc) => {
+        const data = doc.data()
+        const updatedLikes = (data.likes || []).filter(
+          (like: string) => like !== email
+        )
+        return updateDoc(doc.ref, { likes: updatedLikes })
+      })
       await Promise.all(updateLikesPromises)
 
       // 4. 사용자 문서 삭제

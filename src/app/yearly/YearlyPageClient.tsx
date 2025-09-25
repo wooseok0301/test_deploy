@@ -83,16 +83,6 @@ interface YearMeta {
   textColor?: string
 }
 
-// --- 연도 그룹화 함수 추가 ---
-function groupYears(years: string[], groupSize = 5): string[][] {
-  const result: string[][] = []
-  for (let i = 0; i < years.length; i += groupSize) {
-    result.push(years.slice(i, i + groupSize))
-  }
-  return result
-}
-// --- 연도 그룹화 함수 끝 ---
-
 export default function YearlyPageClient() {
   const [posts, setPosts] = useState<Post[]>([])
   const [selectedYear, setSelectedYear] = useState<string>('')
@@ -118,10 +108,6 @@ export default function YearlyPageClient() {
   // Ref for the scrolling tracks to control animation-play-state
   const track1Ref = useRef<HTMLDivElement>(null);
   const track2Ref = useRef<HTMLDivElement>(null);
-
-  // --- New state for opened year group ---
-  const [openedGroup, setOpenedGroup] = useState<number>(0);
-  // --- End new state ---
 
 
   // 로그인 상태 확인 (currentUser 설정)
@@ -157,18 +143,6 @@ export default function YearlyPageClient() {
         } else if (yearsArray.length > 0) {
           setSelectedYear(yearsArray[0])
         }
-
-        // --- Set initial openedGroup based on selectedYear ---
-        if (yearsArray.length > 0) {
-            const initialYear = yearFromUrl && yearsArray.includes(yearFromUrl) ? yearFromUrl : yearsArray[0];
-            const grouped = groupYears(yearsArray, 5);
-            const groupIndex = grouped.findIndex(group => group.includes(initialYear));
-            if (groupIndex !== -1) {
-                setOpenedGroup(groupIndex);
-            }
-        }
-        // --- End initial openedGroup setting ---
-
       } catch (error) {
         console.error('연도 목록 로딩 중 오류:', error)
       }
@@ -362,10 +336,8 @@ export default function YearlyPageClient() {
       setHasMore(true)
       setShowLoadMoreButton(false)
       fetchPosts(true)
-      // Update URL when selectedYear changes
-      router.push(`?year=${selectedYear}`, { scroll: false });
     }
-  }, [selectedYear]) // Added router as dependency
+  }, [selectedYear])
 
   // 수동으로 더 많은 게시물 로드
   const handleLoadMore = async () => {
@@ -522,9 +494,6 @@ export default function YearlyPageClient() {
     secondHalfLinks = allPhotoLinks.slice(midPoint);
   }
 
-  // --- 연도 그룹화 (최신순) ---
-  const groupedYears = groupYears(years, 5);
-  // --- 연도 그룹화 끝 ---
 
   return (
     <div className={styles.container}>
@@ -600,46 +569,23 @@ export default function YearlyPageClient() {
       )}
 
       <div className={styles.contentWrapper}>
-        <div className={styles.leftSpace}>
-          {/* --- Year Selector from team member's code --- */}
-          <aside className={styles.sidebar}> {/* Your sidebar class or similar container */}
-            <div className={styles.yearSelector}>
-              {/* --- 그룹 버튼, 연도 목록 트리 구조 --- */}
-              {groupedYears.map((group, idx) => (
-                <div key={idx} style={{ width: '100%' }}> {/* Ensure div takes full width */}
-                  {/* Year Group Button */}
-                  <button
-                    className={`${styles.yearButton} ${styles.yearGroupButton} ${
-                      openedGroup === idx ? styles.activeGroup : ''
-                    }`}
-                    onClick={() => setOpenedGroup(idx)}
-                  >
-                    {group[0]}년~{group[group.length - 1]}년
-                  </button>
-                  {/* Individual Year Buttons within the group */}
-                  {openedGroup === idx && (
-                    <div className={styles.yearSubList}>
-                      {group.map((year) => (
-                        <button
-                          key={year}
-                          className={`${styles.yearButton} ${
-                            selectedYear === year ? styles.active : ''
-                          }`}
-                          onClick={() => setSelectedYear(year)}
-                        >
-                          {year}년
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </aside>
-          {/* --- End Year Selector from team member's code --- */}
-        </div>
+        <div className={styles.leftSpace} />
 
         <div className={styles.mainContent}>
+          <div className={styles.yearSelector}>
+            {years.map((year) => (
+              <button
+                key={year}
+                className={`${styles.yearButton} ${
+                  selectedYear === year ? styles.active : ''
+                }`}
+                onClick={() => setSelectedYear(year)}
+              >
+                {year}년
+              </button>
+            ))}
+          </div>
+
           {allPhotoLinks.length > 0 && (
             <div className={styles.photoAlbumLinksSection}>
               <h2 className={styles.photoAlbumSectionTitle}>

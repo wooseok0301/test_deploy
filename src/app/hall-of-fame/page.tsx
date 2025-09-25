@@ -60,8 +60,13 @@ export default function HallOfFame() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        // 좋아요가 있는 게시물만 조회하고 서버에서 정렬 (최대 10개)
         const postsRef = collection(db, 'posts')
-        const q = query(postsRef, orderBy('likes', 'desc'))
+        const q = query(
+          postsRef,
+          orderBy('likes', 'desc'),
+          limit(10) // 서버에서 좋아요 순으로 상위 10개만 조회
+        )
         const querySnapshot = await getDocs(q)
 
         const fetchedPosts = querySnapshot.docs
@@ -74,7 +79,7 @@ export default function HallOfFame() {
           }))
           .filter((post) => post.likes.length > 0) // 좋아요가 있는 게시물만 필터링
           .sort((a, b) => {
-            // 1. 좋아요 수로 정렬
+            // 1. 좋아요 수로 정렬 (서버에서 이미 정렬됨)
             if (b.likes.length !== a.likes.length) {
               return b.likes.length - a.likes.length
             }

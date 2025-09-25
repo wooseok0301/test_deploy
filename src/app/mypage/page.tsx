@@ -122,87 +122,71 @@ export default function MyPage() {
     try {
       console.log('Fetching content for user:', email)
 
-      // 내가 작성한 게시물 가져오기
-      const postsRef = collection(db, 'posts')
-      const allPostsSnapshot = await getDocs(postsRef)
-      console.log(
-        'All posts structure:',
-        allPostsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
+      // 내가 작성한 게시물 가져오기 (서버 쿼리)
+      const postsQuery = query(
+        collection(db, 'posts'),
+        where('author.email', '==', email),
+        orderBy('createdAt', 'desc')
       )
-
-      // 게시물 정보를 가져오기 위한 맵 생성
-      const postsMap = new Map()
-      allPostsSnapshot.docs.forEach((doc) => {
-        postsMap.set(doc.id, { id: doc.id, ...doc.data() })
+      const postsSnapshot = await getDocs(postsQuery)
+      const postsMap = new Map<string, any>()
+      const posts = postsSnapshot.docs.map((doc) => {
+        const data = doc.data()
+        const composed = {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt,
+          likes: data.likes || [],
+          views: data.views || 0,
+          author: data.author || { name: '알 수 없음', email },
+        } as Post
+        postsMap.set(doc.id, { id: doc.id, ...data })
+        return composed
       })
-
-      // 모든 게시물을 가져온 후 클라이언트에서 필터링
-      const posts = allPostsSnapshot.docs
-        .map((doc) => {
-          const data = doc.data()
-          console.log('Processing post:', doc.id, data)
-          return {
-            id: doc.id,
-            ...data,
-            createdAt: data.createdAt,
-            likes: data.likes || [],
-            views: data.views || 0,
-            author: data.author || { name: '알 수 없음', email },
-          } as Post
-        })
-        .filter((post) => post.author.email === email)
-        .sort(
-          (a, b) =>
-            b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
-        )
 
       console.log('Filtered posts:', posts.length)
       setMyPosts(posts)
       setDisplayedPosts(posts.slice(0, 9))
       setShowMorePosts(posts.length > 9)
 
-      // 내가 좋아요한 게시물 필터링
-      const likedPosts = allPostsSnapshot.docs
-        .map((doc) => {
-          const data = doc.data()
-          return {
-            id: doc.id,
-            ...data,
-            createdAt: data.createdAt,
-            likes: data.likes || [],
-            views: data.views || 0,
-            author: data.author || { name: '알 수 없음', email },
-          } as Post
-        })
-        .filter((post) => post.likes.includes(email))
-        .sort(
-          (a, b) =>
-            b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
-        )
+      // 내가 좋아요한 게시물 (서버 쿼리)
+      const likedQuery = query(
+        collection(db, 'posts'),
+        where('likes', 'array-contains', email),
+        orderBy('createdAt', 'desc')
+      )
+      const likedSnapshot = await getDocs(likedQuery)
+      const likedPosts = likedSnapshot.docs.map((doc) => {
+        const data = doc.data()
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt,
+          likes: data.likes || [],
+          views: data.views || 0,
+          author: data.author || { name: '알 수 없음', email },
+        } as Post
+      })
 
       console.log('Filtered liked posts:', likedPosts.length)
       setLikedPosts(likedPosts)
       setDisplayedLikedPosts(likedPosts.slice(0, 9))
       setShowMoreLikedPosts(likedPosts.length > 9)
 
-      // 내가 작성한 댓글 가져오기
-      const commentsRef = collection(db, 'comments')
-      const allCommentsSnapshot = await getDocs(commentsRef)
-
-      // 모든 댓글을 가져온 후 클라이언트에서 필터링
-      const comments = allCommentsSnapshot.docs
+      // 내가 작성한 댓글 (서버 쿼리)
+      const commentsQuery = query(
+        collection(db, 'comments'),
+        where('author.email', '==', email),
+        orderBy('createdAt', 'desc')
+      )
+      const commentsSnapshot = await getDocs(commentsQuery)
+      const comments = commentsSnapshot.docs
         .map((doc) => {
-          const comment = doc.data()
+          const comment = doc.data() as any
           const postData = postsMap.get(comment.postId)
-
-          // 게시물이 존재하지 않으면 null 반환
           if (!postData) {
             return null
           }
-
           return {
             id: doc.id,
             postId: comment.postId,
@@ -214,14 +198,7 @@ export default function MyPage() {
             postCreatedAt: postData.createdAt,
           } as Comment
         })
-        .filter(
-          (comment): comment is Comment =>
-            comment !== null && comment.author.email === email
-        )
-        .sort(
-          (a, b) =>
-            b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
-        )
+        .filter((c): c is Comment => c !== null)
 
       console.log('Filtered comments:', comments.length)
       setMyComments(comments)

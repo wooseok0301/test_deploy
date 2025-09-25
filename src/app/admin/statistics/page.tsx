@@ -9,6 +9,7 @@ import {
   getDoc,
   where,
   orderBy,
+  getCountFromServer,
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -78,28 +79,24 @@ export default function StatisticsPage() {
         ...doc.data(),
       })) as User[]
 
-      // 각 사용자의 댓글 수와 좋아요 수 가져오기
+      // 각 사용자의 댓글 수와 좋아요 수 가져오기 (최적화)
       const userStats = await Promise.all(
         usersData.map(async (user) => {
-          // 댓글 수 가져오기
-          const commentsRef = collection(db, 'comments')
+          // 댓글 수 가져오기 (count 쿼리)
           const commentsQuery = query(
-            commentsRef,
+            collection(db, 'comments'),
             where('author.email', '==', user.email)
           )
-          const commentsSnapshot = await getDocs(commentsQuery)
-          const commentCount = commentsSnapshot.size
+          const commentCountSnapshot = await getCountFromServer(commentsQuery)
+          const commentCount = commentCountSnapshot.data().count
 
-          // 좋아요 수 가져오기
-          const postsRef = collection(db, 'posts')
-          const postsSnapshot = await getDocs(postsRef)
-          let likeCount = 0
-          postsSnapshot.docs.forEach((doc) => {
-            const post = doc.data()
-            if (post.likes?.includes(user.email)) {
-              likeCount++
-            }
-          })
+          // 좋아요 수 가져오기 (array-contains 쿼리)
+          const likedPostsQuery = query(
+            collection(db, 'posts'),
+            where('likes', 'array-contains', user.email)
+          )
+          const likedPostsSnapshot = await getCountFromServer(likedPostsQuery)
+          const likeCount = likedPostsSnapshot.data().count
 
           return {
             ...user,

@@ -210,9 +210,9 @@ const confirmDelete = async () => {
           try {
             const pdfRef = ref(storage, fileUrl)
             deleteFilePromises.push(deleteObject(pdfRef))
-            console.log('보고서 PDF 파일 삭제:', fileUrl)
+            console.log('참고자료 PDF 파일 삭제:', fileUrl)
           } catch (error) {
-            console.error('보고서 PDF 파일 삭제 실패:', error)
+            console.error('참고자료 PDF 파일 삭제 실패:', error)
           }
         })
       }
@@ -647,7 +647,7 @@ const confirmDelete = async () => {
           {post.referenceFileUrls && post.referenceFileUrls.length > 0 && (
             <div className={styles.section}>
               <h2 className={styles.sectionTitle} style={{ color: '#000' }}>
-                보고서
+                참고자료
               </h2>
               <div className={styles.referenceFiles}>
                 {post.referenceFileUrls.map((fileUrl, index) => {

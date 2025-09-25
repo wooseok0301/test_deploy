@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -12,6 +11,7 @@ import {
   doc,
   updateDoc,
   increment,
+  limit,
 } from 'firebase/firestore'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth, db } from '@/firebase/firebase'
@@ -77,8 +77,13 @@ export default function SearchPageClient() {
   const performSearch = async (searchTerm: string) => {
     setLoading(true)
     try {
+      // 검색 결과 제한 (최대 30개)
       const postsRef = collection(db, 'posts')
-      const q = query(postsRef, orderBy('createdAt', 'desc'))
+      const q = query(
+        postsRef,
+        orderBy('createdAt', 'desc'),
+        limit(30) // 검색 결과를 30개로 제한
+      )
       const querySnapshot = await getDocs(q)
 
       const searchResults = querySnapshot.docs

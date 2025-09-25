@@ -14,6 +14,10 @@ import {
   orderBy,
   updateDoc,
   increment,
+  limit,
+  startAfter,
+  getCountFromServer,
+  DocumentSnapshot,
 } from 'firebase/firestore'
 import { ref, deleteObject } from 'firebase/storage'
 import { storage } from '@/firebase/firebase'
@@ -43,93 +47,149 @@ interface User {
 export default function PostManagement() {
   const router = useRouter()
   const [posts, setPosts] = useState<Post[]>([])
-  const [users, setUsers] = useState<{ [key: string]: User }>({}) // 이메일: 유저정보 매핑
+  // users 상태 제거 - 게시물에 이미 작성자 정보가 저장되어 있음
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const postsPerPage = 7
+  const postsPerPage = 10 // 관리자 페이지에서는 10개씩 표시
+  // 각 페이지의 시작 커서 캐시 (1페이지 시작은 null)
+  const [pageStarts, setPageStarts] = useState<Array<DocumentSnapshot | null>>([
+    null,
+  ])
+  const [totalPosts, setTotalPosts] = useState(0)
 
-  const fetchUsers = async () => {
-    try {
-      const usersQuery = query(collection(db, 'users'))
-      const querySnapshot = await getDocs(usersQuery)
-      const usersMap: { [key: string]: User } = {}
-      querySnapshot.docs.forEach((doc) => {
-        const { email: _, ...userData } = doc.data() as User
-        usersMap[doc.id] = { email: doc.id, ...userData }
-      })
-      console.log('가져온 유저 정보:', usersMap) // 유저 정보 확인
-      setUsers(usersMap)
-    } catch (error) {
-      console.error('사용자 정보 조회 실패:', error)
-    }
+  // fetchUsers 함수 제거 - 게시물에 이미 작성자 정보가 저장되어 있으므로 불필요
+
+  const fetchTotalPosts = async () => {
+    const countSnap = await getCountFromServer(query(collection(db, 'posts')))
+    setTotalPosts(countSnap.data().count)
   }
 
-  const fetchPosts = async () => {
+  // target 페이지의 시작 커서를 갖고 있도록 필요한 만큼 앞 페이지를 순차적으로 스캔
+  const buildCursorUpTo = async (targetPage: number) => {
+    // 이미 충분한 커서가 있으면 스킵
+    if (pageStarts[targetPage] !== undefined) return
+
+    let workingStarts = [...pageStarts]
+    for (let i = workingStarts.length; i <= targetPage; i++) {
+      const startCursor = workingStarts[i - 1]
+      const qBase = startCursor
+        ? query(
+            collection(db, 'posts'),
+            orderBy('createdAt', 'desc'),
+            startAfter(startCursor),
+            limit(postsPerPage)
+          )
+        : query(
+            collection(db, 'posts'),
+            orderBy('createdAt', 'desc'),
+            limit(postsPerPage)
+          )
+      const snap = await getDocs(qBase)
+      if (snap.empty) {
+        break
+      }
+      const lastDoc = snap.docs[snap.docs.length - 1]
+      workingStarts[i] = lastDoc
+    }
+    setPageStarts(workingStarts)
+  }
+
+  const fetchPosts = async (page: number = 1, reset: boolean = true) => {
     try {
-      const postsQuery = query(
-        collection(db, 'posts'),
-        orderBy('createdAt', 'desc')
-      )
+      setLoading(true)
+
+      if (reset) {
+        // 리셋 시 커서 캐시 초기화
+        setPageStarts([null])
+      }
+
+      if (page > 1 && pageStarts[page] === undefined) {
+        await buildCursorUpTo(page)
+      }
+
+      const startCursor = pageStarts[page - 1] ?? null
+      const postsQuery = startCursor
+        ? query(
+            collection(db, 'posts'),
+            orderBy('createdAt', 'desc'),
+            startAfter(startCursor),
+            limit(postsPerPage)
+          )
+        : query(
+            collection(db, 'posts'),
+            orderBy('createdAt', 'desc'),
+            limit(postsPerPage)
+          )
+
       const querySnapshot = await getDocs(postsQuery)
-      const postsData = await Promise.all(
-        querySnapshot.docs.map(async (docSnapshot) => {
-          const data = docSnapshot.data()
 
-          // author 정보가 없는 경우 처리
-          if (!data.author) {
-            return {
-              id: docSnapshot.id,
-              ...data,
-              author: {
-                name: '익명',
-                email: 'unknown',
-              },
-              likes: data.likes || [],
-              views: data.views || 0,
-            } as Post
-          }
+      // 별도 작성자 조회 제거 - 게시물에 이미 저장된 author 정보 활용
+      const postsData = querySnapshot.docs.map((docSnapshot) => {
+        const data = docSnapshot.data()
 
-          // author.email 정보가 없는 경우 처리
-          if (!data.author.email) {
-            return {
-              id: docSnapshot.id,
-              ...data,
-              author: {
-                ...data.author,
-                name: data.author.name || '익명',
-                email: 'unknown',
-              },
-              likes: data.likes || [],
-              views: data.views || 0,
-            } as Post
-          }
-
-          // 작성자 정보 가져오기
-          const authorRef = doc(db, 'users', data.author.email)
-          const authorSnap = await getDoc(authorRef)
-          const authorData = authorSnap.data() as { name?: string } | undefined
-
-          // 작성자 이름이 있는 경우에만 사용
-          const authorName = authorData?.name || data.author.name || '익명'
-
+        // author 정보가 없는 경우 처리
+        if (!data.author) {
           return {
             id: docSnapshot.id,
             ...data,
             author: {
-              name: authorName,
-              email: data.author.email,
+              name: '익명',
+              email: 'unknown',
             },
             likes: data.likes || [],
             views: data.views || 0,
           } as Post
+        }
+
+        // author.email 정보가 없는 경우 처리
+        if (!data.author.email) {
+          return {
+            id: docSnapshot.id,
+            ...data,
+            author: {
+              ...data.author,
+              name: data.author.name || '익명',
+              email: 'unknown',
+            },
+            likes: data.likes || [],
+            views: data.views || 0,
+          } as Post
+        }
+
+        // 게시물에 저장된 작성자 정보 그대로 사용 (별도 조회 제거)
+        return {
+          id: docSnapshot.id,
+          ...data,
+          author: {
+            name: data.author.name || '익명',
+            email: data.author.email,
+          },
+          likes: data.likes || [],
+          views: data.views || 0,
+        } as Post
+      })
+
+      // 다음 페이지 시작 커서 캐시 업데이트
+      if (querySnapshot.docs.length > 0) {
+        const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1]
+        setPageStarts((prev) => {
+          const next = [...prev]
+          next[page] = lastDoc
+          return next
         })
-      )
+      }
+
+      // 번호형 페이지는 해당 페이지 데이터만 표시
       setPosts(postsData)
+      setCurrentPage(page)
+
+      setLoading(false)
     } catch (error) {
       console.error('게시물 목록 조회 실패:', error)
       setError('게시물 목록을 불러오는데 실패했습니다.')
+      setLoading(false)
     }
   }
 
@@ -143,7 +203,8 @@ export default function PostManagement() {
           if (userData.role === 'admin' || userData.role === 'subAdmin') {
             const { email: _, ...userInfo } = userData
             setCurrentUser({ email: user.email, ...userInfo })
-            await Promise.all([fetchUsers(), fetchPosts()]) // 유저 정보와 게시물 정보를 병렬로 가져옴
+            await fetchTotalPosts()
+            await fetchPosts(1, true) // 1페이지 로드
           } else {
             router.push('/')
           }
@@ -159,14 +220,12 @@ export default function PostManagement() {
     return () => unsubscribe()
   }, [router])
 
-  // 페이지네이션 관련 계산
-  const indexOfLastPost = currentPage * postsPerPage
-  const indexOfFirstPost = indexOfLastPost - postsPerPage
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost)
-  const totalPages = Math.ceil(posts.length / postsPerPage)
-
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
+  // 페이지네이션 핸들러 (번호형)
+  const handlePageChange = async (pageNumber: number) => {
+    if (pageNumber < 1) return
+    const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage))
+    if (pageNumber > totalPages) return
+    await fetchPosts(pageNumber, false)
   }
 
   const handleDeletePost = async (postId: string) => {
@@ -291,7 +350,7 @@ export default function PostManagement() {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((post) => (
+            {posts.map((post) => (
               <tr key={post.id}>
                 <td>
                   <Link
@@ -326,16 +385,12 @@ export default function PostManagement() {
           </tbody>
         </table>
       </div>
-      {totalPages > 1 && (
-        <div className={styles.pagination}>
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={styles.pageButton}
-          >
-            이전
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+      <div className={styles.pagination}>
+        <div>
+          {Array.from(
+            { length: Math.max(1, Math.ceil(totalPosts / postsPerPage)) },
+            (_, i) => i + 1
+          ).map((number) => (
             <button
               key={number}
               onClick={() => handlePageChange(number)}
@@ -346,15 +401,8 @@ export default function PostManagement() {
               {number}
             </button>
           ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={styles.pageButton}
-          >
-            다음
-          </button>
         </div>
-      )}
+      </div>
     </div>
   )
 }

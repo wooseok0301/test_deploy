@@ -252,7 +252,25 @@ export default function Comments({
     if (!window.confirm('댓글을 삭제하시겠습니까?')) return
 
     try {
-      await deleteDoc(firestoreDoc(db, 'comments', commentId))
+      // 대댓글 포함 전체 삭제 (계층적 삭제)
+      const deleteQueue: string[] = [commentId]
+
+      while (deleteQueue.length > 0) {
+        const currentId = deleteQueue.pop() as string
+
+        // 현재 댓글의 자식 댓글들 조회 후 큐에 추가
+        const childrenQuery = query(
+          collection(db, 'comments'),
+          where('parentId', '==', currentId)
+        )
+        const childrenSnapshot = await getDocs(childrenQuery)
+        childrenSnapshot.forEach((childDoc) => {
+          deleteQueue.push(childDoc.id)
+        })
+
+        // 현재 댓글 삭제
+        await deleteDoc(firestoreDoc(db, 'comments', currentId))
+      }
       // 댓글 목록 새로고침
       const q = query(collection(db, 'comments'), where('postId', '==', postId))
       const querySnapshot = await getDocs(q)
