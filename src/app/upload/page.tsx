@@ -477,7 +477,7 @@ export default function UploadPage() {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 className={styles.input}
-                placeholder="프로젝트명을 입력하세요"
+                placeholder=" 프로젝트명을 입력하세요"
               />
             </div>
             {/* 팀명 */}
@@ -488,7 +488,7 @@ export default function UploadPage() {
                 value={teamName}
                 onChange={e => setTeamName(e.target.value)}
                 className={styles.input}
-                placeholder="팀명을 입력하세요"
+                placeholder=" 팀명을 입력하세요"
               />
             </div>
           </div>
@@ -722,7 +722,7 @@ export default function UploadPage() {
                 value={youtubeLink}
                 onChange={(e) => setYoutubeLink(e.target.value)}
                 className={styles.input}
-                placeholder="참고영상 링크를 입력하세요"
+                placeholder=" 참고영상 링크를 입력하세요"
               />
               {youtubeLink && (
                 <div className={styles.youtubePreview}>
