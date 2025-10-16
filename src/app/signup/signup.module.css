@@ -1,0 +1,146 @@
+/* 전체 페이지 레이아웃을 위한 래퍼 */
+.pageWrapper {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.container {
+  width: 600px;
+  padding: 50px;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: black;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.input {
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: black;
+  background-color: white;
+  font-size: 16px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #333;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  padding: 15px;
+  background-color: #000000;
+  color: white;
+  border: 2px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.emailRow {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.emailRow .input {
+  flex: 1;
+}
+
+.verifyButton {
+  padding: 15px 25px;
+  background-color: #000000;
+  color: white;
+  border: 2px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.verifyButton:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputWithIcon {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.eyeIcon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.info {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+  color: #666;
+}

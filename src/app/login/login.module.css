@@ -1,0 +1,145 @@
+/* 전체 페이지 레이아웃을 위한 래퍼 */
+.pageWrapper {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+.container {
+  width: 400px;
+  padding: 40px;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 350px;
+  position: relative;
+  z-index: 1;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  border: 1px solid red;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: black;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.input {
+  padding: 12px;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: black;
+  background-color: white;
+  font-size: 16px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #333;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  padding: 12px;
+  background-color: #000000;
+  color: white;
+  border: 2px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.links {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  color: black;
+}
+
+.links a {
+  color: black;
+  text-decoration: underline;
+}
+
+.links a:hover {
+  color: #333;
+}
+
+.toggle {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.toggle button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  color: black;
+  cursor: pointer;
+}
+
+.emailRow {
+  display: flex;
+  gap: 10px;
+}
+
+.verifyButton {
+  padding: 10px 20px;
+  background-color: #000000;
+  color: white;
+  border: 2px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.verifyButton:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
