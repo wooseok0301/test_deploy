@@ -465,130 +465,32 @@ export default function UploadPage() {
 
   return (
     <div className={styles.container}>
+      <h1 className={styles.title}>새 게시물 작성</h1>
+      <div className={styles.titleLine}></div>
       <div className={styles.formContainer}>
-        <h1 className={styles.title}>새 게시물 작성</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>프로젝트명</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={styles.input}
-              placeholder="프로젝트명을 입력하세요"
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>팀명</label>
-            <input
-              type="text"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              className={styles.input}
-              placeholder="팀명을 입력하세요"
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="content" className={styles.label}>
-              프로젝트 개요
-            </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className={styles.textarea}
-              placeholder="프로젝트 내용을 입력하세요"
-              rows={10}
-            />
-          </div>
-
-          {/* 상세 이미지 업로드 */}
-          <div className={styles.formGroup}>
-            <label htmlFor="detailImages" className={styles.label}>
-              상세 이미지
-            </label>
-            <input
-              type="file"
-              id="detailImages"
-              accept="image/*"
-              multiple
-              onChange={handleDetailFilesChange}
-              className={styles.fileInput}
-            />
-            <div className={styles.detailImagePreviewContainer}>
-              {detailImagePreviews.map((preview, index) => (
-                <div key={index} className={styles.detailImageWrapper}>
-                  <img
-                    src={preview}
-                    alt={`상세 이미지 ${index + 1} 미리보기`}
-                    className={styles.detailImagePreview}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeDetailImage(index)}
-                    className={styles.removeImageButton}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
+          <div className={styles.topRow}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>프로젝트명</label>
+              <input
+                type="text"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                className={styles.input}
+                placeholder="프로젝트명을 입력하세요"
+              />
             </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>썸네일</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleThumbnailChange}
-              ref={fileInputRef}
-              className={styles.fileInput}
-            />
-            {thumbnailPreview && (
-              <div className={styles.imagePreview}>
-                <img src={thumbnailPreview} alt="썸네일 미리보기" />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setThumbnailFile(null)
-                    setThumbnailPreview(null)
-                    if (fileInputRef.current) {
-                      fileInputRef.current.value = ''
-                    }
-                  }}
-                  className={styles.removeImage}
-                >
-                  썸네일 제거
-                </button>
-              </div>
-            )}
-          </div>
-          <div className={styles.inputGroup}>
-            <label className={styles.label}>참고영상</label>
-            <input
-              type="text"
-              value={youtubeLink}
-              onChange={(e) => setYoutubeLink(e.target.value)}
-              className={styles.input}
-              placeholder="참고영상 링크를 입력하세요"
-            />
-            {youtubeLink && (
-              <div className={styles.youtubePreview}>
-                <iframe
-                  width="560"
-                  height="315"
-                  src={`https://www.youtube.com/embed/${
-                    youtubeLink.match(
-                      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^#&?]*).*/
-                    )?.[1]
-                  }`}
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            )}
+            {/* 팀명 */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>팀명</label>
+              <input
+                type="text"
+                value={teamName}
+                onChange={e => setTeamName(e.target.value)}
+                className={styles.input}
+                placeholder="팀명을 입력하세요"
+              />
+            </div>
           </div>
           <div className={styles.inputGroup}>
             <label className={styles.label}>멤버</label>
@@ -655,6 +557,87 @@ export default function UploadPage() {
               멤버추가
             </button>
           </div>
+
+          <div className={styles.Line}></div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="content" className={styles.label}>
+              프로젝트 개요
+            </label>
+            <textarea
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className={styles.textarea}
+              placeholder="프로젝트 내용을 입력하세요"
+              rows={10}
+            />
+          </div>
+          <div className={styles.Line}></div>
+          {/* 상세 이미지 업로드 */}
+          <div className={styles.imagedesign}>
+            <div className={styles.formGroup}>
+              <label htmlFor="detailImages" className={styles.label}>
+                상세 이미지
+              </label>
+              <input
+                type="file"
+                id="detailImages"
+                accept="image/*"
+                multiple
+                onChange={handleDetailFilesChange}
+                className={styles.fileInput}
+              />
+              <div className={styles.detailImagePreviewContainer}>
+                {detailImagePreviews.map((preview, index) => (
+                  <div key={index} className={styles.detailImageWrapper}>
+                    <img
+                      src={preview}
+                      alt={`상세 이미지 ${index + 1} 미리보기`}
+                      className={styles.detailImagePreview}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeDetailImage(index)}
+                      className={styles.removeImageButton}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>썸네일</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailChange}
+                ref={fileInputRef}
+                className={styles.fileInput}
+              />
+              {thumbnailPreview && (
+                <div className={styles.imagePreview}>
+                  <img src={thumbnailPreview} alt="썸네일 미리보기" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setThumbnailFile(null)
+                      setThumbnailPreview(null)
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = ''
+                      }
+                    }}
+                    className={styles.removeImage}
+                  >
+                    썸네일 제거
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className={styles.Line}></div>
           <div className={styles.formGroup}>
             <h2 className={styles.sectionTitle} style={{ color: '#000' }}>
               발표자료
@@ -664,9 +647,8 @@ export default function UploadPage() {
               <div className={styles.toggleGroup}>
                 <button
                   type="button"
-                  className={`${styles.toggleButton} ${
-                    pptInputMode === 'file' ? styles.active : ''
-                  }`}
+                  className={`${styles.toggleButton} ${pptInputMode === 'file' ? styles.active : ''
+                    }`}
                   onClick={() => {
                     setPptInputMode('file')
                     setPptUrl('')
@@ -676,9 +658,8 @@ export default function UploadPage() {
                 </button>
                 <button
                   type="button"
-                  className={`${styles.toggleButton} ${
-                    pptInputMode === 'url' ? styles.active : ''
-                  }`}
+                  className={`${styles.toggleButton} ${pptInputMode === 'url' ? styles.active : ''
+                    }`}
                   onClick={() => {
                     setPptInputMode('url')
                     setPptFile(null)
@@ -687,60 +668,86 @@ export default function UploadPage() {
                   URL 입력
                 </button>
               </div>
-
-              {/* URL 모드 */}
-              {pptInputMode === 'url' && (
-                <div className={styles.inputGroup}>
-                  <label className={styles.label}>발표자료 URL</label>
-                  <input
-                    type="text"
-                    value={pptUrl}
-                    onChange={(e) => setPptUrl(e.target.value)}
-                    className={styles.input}
-                    placeholder="발표자료 링크를 입력하세요"
-                  />
-                </div>
-              )}
-
-              {/* 파일 모드 */}
-              {pptInputMode === 'file' && (
+            </div>
+            {/* URL 모드 */}
+            {pptInputMode === 'url' && (
+              <div className={styles.inputGroup}>
+                <label className={styles.sublabel}>발표자료 URL</label>
                 <input
-                  type="file"
-                  id="pptFile"
-                  accept=".ppt,.pptx"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) {
-                      // 파일 크기 체크 (10MB)
-                      if (file.size > 10 * 1024 * 1024) {
-                        alert('파일 크기는 10MB를 초과할 수 없습니다.')
-                        return
-                      }
-                      setPptFile(file)
-                    }
-                  }}
-                  className={styles.fileInput}
+                  type="text"
+                  value={pptUrl}
+                  onChange={(e) => setPptUrl(e.target.value)}
+                  className={styles.substyle}
+                  placeholder="발표자료 링크를 입력하세요"
                 />
-              )}
-              {pptFile && (
-                <div className={styles.fileInfo}>
-                  <span>{pptFile.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => setPptFile(null)}
-                    className={styles.removeFileButton}
-                  >
-                    삭제
-                  </button>
+              </div>
+            )}
+
+            {/* 파일 모드 */}
+            {pptInputMode === 'file' && (
+              <input
+                type="file"
+                id="pptFile"
+                accept=".ppt,.pptx"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    // 파일 크기 체크 (10MB)
+                    if (file.size > 10 * 1024 * 1024) {
+                      alert('파일 크기는 10MB를 초과할 수 없습니다.')
+                      return
+                    }
+                    setPptFile(file)
+                  }
+                }}
+                className={styles.fileInput}
+              />
+            )}
+            {pptFile && (
+              <div className={styles.fileInfo}>
+                <span>{pptFile.name}</span>
+                <button
+                  type="button"
+                  onClick={() => setPptFile(null)}
+                  className={styles.removeFileButton}
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>참고영상</label>
+              <input
+                type="text"
+                value={youtubeLink}
+                onChange={(e) => setYoutubeLink(e.target.value)}
+                className={styles.input}
+                placeholder="참고영상 링크를 입력하세요"
+              />
+              {youtubeLink && (
+                <div className={styles.youtubePreview}>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={`https://www.youtube.com/embed/${youtubeLink.match(
+                      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^#&?]*).*/
+                    )?.[1]
+                      }`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               )}
             </div>
-            {pptInputMode === 'file' && pptFile && (
-              <div className={styles.pptPreview}>
-                <PptViewer file={pptFile} height="500px" />
-              </div>
-            )}
+
           </div>
+          {pptInputMode === 'file' && pptFile && (
+            <div className={styles.pptPreview}>
+              <PptViewer file={pptFile} height="500px" />
+            </div>
+          )}
           <div className={styles.formGroup}>
             <h2 className={styles.sectionTitle} style={{ color: '#000' }}>
               보고서
@@ -749,18 +756,16 @@ export default function UploadPage() {
               <div className={styles.toggleGroup}>
                 <button
                   type="button"
-                  className={`${styles.toggleButton} ${
-                    referenceInputMode === 'file' ? styles.active : ''
-                  }`}
+                  className={`${styles.toggleButton} ${referenceInputMode === 'file' ? styles.active : ''
+                    }`}
                   onClick={() => setReferenceInputMode('file')}
                 >
                   파일 업로드
                 </button>
                 <button
                   type="button"
-                  className={`${styles.toggleButton} ${
-                    referenceInputMode === 'url' ? styles.active : ''
-                  }`}
+                  className={`${styles.toggleButton} ${referenceInputMode === 'url' ? styles.active : ''
+                    }`}
                   onClick={() => setReferenceInputMode('url')}
                 >
                   URL 입력
@@ -830,6 +835,7 @@ export default function UploadPage() {
               )}
             </div>
           </div>
+          <div className={styles.Line}></div>
           <div className={styles.formGroup}>
             <h2 className={styles.sectionTitle} style={{ color: '#000' }}>
               웹사이트 링크
@@ -841,7 +847,7 @@ export default function UploadPage() {
                     type="text"
                     value={link}
                     onChange={(e) => updateWebsiteLink(index, e.target.value)}
-                    className={styles.input}
+                    className={styles.Weblink}
                     placeholder="웹사이트 링크 입력"
                   />
                   {index > 0 && (
@@ -868,7 +874,7 @@ export default function UploadPage() {
                     type="text"
                     value={link}
                     onChange={(e) => updateGithubLink(index, e.target.value)}
-                    className={styles.input}
+                    className={styles.Gitlink}
                     placeholder="GitHub 링크 입력"
                   />
                   {index > 0 && (
