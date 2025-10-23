@@ -83,7 +83,7 @@ export default function Signup() {
     }
 
     const actionCodeSettings = {
-      url: 'http://management-service-fcfe3.firebaseapp.com/verify?email=' + encodeURIComponent(email),
+      url: 'http://jbuis.kr/verify?email=' + encodeURIComponent(email),
       handleCodeInApp: true,
     }
 
