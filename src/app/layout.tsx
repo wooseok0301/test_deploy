@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import { Toaster } from 'react-hot-toast' //추가된 코드
+import { Toaster } from 'react-hot-toast' 
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,7 +23,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
-        <Toaster /> //추가된 코드
+        <Toaster /> 
       </body>
     </html>
   )
