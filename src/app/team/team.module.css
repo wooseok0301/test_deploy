@@ -1,0 +1,129 @@
+.container {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fa; /* 배경색을 좀 더 밝게 조정 */
+  margin: 0;
+  padding: 60px 20px; /* 상하 여백 늘리고 좌우 여백 추가 */
+  min-height: 100vh;
+  color: #333;
+}
+
+.title {
+  text-align: center;
+  font-size: 3rem; /* 제목 크기 키움 */
+  font-weight: 700; /* 제목 두껍게 */
+  color: #212529; /* 더 진한 색상 */
+  margin-bottom: 60px; /* 여백 늘림 */
+  letter-spacing: -0.05em; /* 자간 조정 */
+}
+
+.teamContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 카드 최소 너비 늘림 */
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px; /* 컨테이너 내부 패딩 추가 */
+}
+
+.personCard {
+  background-color: #ffffff;
+  border-radius: 12px; /* 모서리를 약간 덜 둥글게 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* 그림자 더 부드럽게 */
+  padding: 35px 20px; /* 패딩 조정 */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 그림자도 전환 효과 추가 */
+  border: 1px solid #e9ecef; /* 미묘한 경계선 추가 */
+}
+
+.personCard:hover {
+  transform: translateY(-10px); /* 호버 시 더 크게 이동 */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12); /* 호버 시 그림자 강조 */
+}
+
+.imgContainer {
+  width: 140px; /* 이미지 크기 약간 줄임 */
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px; /* 아래 여백 조정 */
+  border: 4px solid #ffffff; /* 흰색 테두리 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 이미지 그림자 부드럽게 */
+  background-color: #dee2e6; /* 이미지 로딩 전 배경색 */
+  display: flex; /* 이미지 중앙 정렬을 위해 flexbox 사용 */
+  align-items: center;
+  justify-content: center;
+}
+
+.imgContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* 이미지 하단 미세한 여백 제거 */
+}
+
+.personName {
+  margin: 0 0 8px 0; /* 여백 조정 */
+  font-size: 1.65rem; /* 이름 글자 크기 조정 */
+  font-weight: 600; /* 이름 굵기 */
+  color: #343a40; /* 이름 색상 조정 */
+  letter-spacing: -0.02em; /* 자간 조정 */
+}
+
+.studentId {
+  margin: 0;
+  font-size: 1.05rem; /* 학번 글자 크기 조정 */
+  color: #6c757d; /* 학번 색상 조정 */
+  font-weight: 400;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+  }
+
+  .teamContainer {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 모바일에서 카드 최소 너비 줄임 */
+    gap: 20px;
+  }
+
+  .personCard {
+    padding: 25px 15px;
+  }
+
+  .imgContainer {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+  }
+
+  .personName {
+    font-size: 1.4rem;
+  }
+
+  .studentId {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 40px 15px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+
+  .teamContainer {
+    grid-template-columns: 1fr; /* 한 열로 변경 */
+  }
+
+  .personCard {
+    max-width: 300px; /* 모바일에서 카드 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+  }
+}

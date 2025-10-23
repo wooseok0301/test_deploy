@@ -20,6 +20,7 @@ export default function Footer() {
             <li><Link href="/upload" className={styles.link}>프로젝트 업로드</Link></li>
             <li><Link href="/hall-of-fame" className={styles.link}>명예의 전당</Link></li>
             <li><Link href="/yearly" className={styles.link}>연도별 보기</Link></li>
+            <li><Link href="/team" className={styles.link}>팀원 소개</Link></li>
           </ul>
         </div>
 

@@ -249,7 +249,15 @@ export default function Header() {
               pathname === '/hall-of-fame' ? styles.active : ''
             }`}
           >
-            명예전당
+            명예의 전당
+          </Link>
+          <Link
+            href="/team"
+            className={`${styles.navItem} ${
+              pathname === '/team' ? styles.active : ''
+            }`}
+          >
+            팀원 소개
           </Link>
         </nav>
         <div className={styles.authSection}>
