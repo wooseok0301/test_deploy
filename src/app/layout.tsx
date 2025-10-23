@@ -18,8 +18,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://jbuis.kr/og-image.png', 
-        width: 800, 
-        height: 400, 
         alt: 'Clix 프로젝트 미리보기', 
       },
     ],
