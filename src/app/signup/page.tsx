@@ -83,7 +83,7 @@ export default function Signup() {
     }
 
     const actionCodeSettings = {
-      url: 'http://localhost:3000/verify?email=' + encodeURIComponent(email),
+      url: 'https://test02-git-main-sws010301-3386s-projects.vercel.app/verify?email=' + encodeURIComponent(email),
       handleCodeInApp: true,
     }
 
