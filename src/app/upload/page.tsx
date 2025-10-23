@@ -379,13 +379,20 @@ export default function UploadPage() {
       }
 
       // 유튜브 링크에서 비디오 ID 추출
-      let youtubeVideoId = null
-      if (youtubeLink) {
-        const regExp =
-          /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-        const match = youtubeLink.match(regExp)
-        youtubeVideoId = match && match[2].length === 11 ? match[2] : null
-      }
+let youtubeVideoId = null
+if (youtubeLink) {
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+  const match = youtubeLink.match(regExp)
+
+
+  if (match && match[2] && match[2].length === 11) {
+    youtubeVideoId = match[2];
+  } else {
+    youtubeVideoId = null; // 추출 실패 또는 길이 불일치
+  }
+} else {
+}
 
       // 게시물 저장
       await addDoc(collection(db, 'posts'), {

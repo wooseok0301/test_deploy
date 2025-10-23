@@ -651,15 +651,13 @@ const confirmDelete = async () => {
               </h2>
               <div className={styles.referenceFiles}>
                 {post.referenceFileUrls.map((fileUrl, index) => {
-                  // URL에서 파일명 추출
-                  const fileName =
-                    fileUrl.split('/').pop()?.split('_').slice(1).join('_') ||
-                    `${index + 1}번 파일.pdf`
+                  // 파일명 추출 로직을 단순화하여 "N번 파일.pdf" 형태로 변경
+                  const displayFileName = `${index + 1}번 파일.pdf`;
                   return (
                     <div key={index} className={styles.referenceFile}>
                       <a
                         href={fileUrl}
-                        download={fileName}
+                        download={displayFileName} // 다운로드 시 이 파일명으로 저장됩니다.
                         className={styles.referenceFileLink}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -673,7 +671,7 @@ const confirmDelete = async () => {
                         >
                           <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
                         </svg>
-                        <span>{fileName}</span>
+                        <span>{displayFileName}</span> {/* 화면에 표시될 파일명 */}
                         <svg
                           viewBox="0 0 24 24"
                           width="16"

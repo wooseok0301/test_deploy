@@ -160,7 +160,7 @@ export default function EditPage() {
         setThumbnailPreview(postData.thumbnailUrl || null)
         setYoutubeLink(
           postData.youtubeVideoId
-            ? `https://www.youtube.com/watch?v=${postData.youtubeVideoId}`
+            ? `${postData.youtubeVideoId}`
             : ''
         )
         setTeamMembers(postData.teamMembers || [])
@@ -405,7 +405,7 @@ export default function EditPage() {
         return
       }
 
-      setReferenceFiles([...referenceFiles, ...pdfFiles])
+      setReferenceFiles((prevFiles) => [...prevFiles, ...pdfFiles])
     }
   }
 
@@ -879,9 +879,8 @@ export default function EditPage() {
                   {(existingReferenceFiles.length > 0 || referenceFiles.length > 0) && (
                     <div className={styles.referenceFiles}>
                       {existingReferenceFiles.map((fileUrl, index) => {
-                        const fileName =
-                          fileUrl.split('/').pop()?.split('_').slice(1).join('_') ||
-                          `기존 보고서_${index + 1}.pdf`
+                        // 변경된 부분: 파일 이름을 "1번 파일", "2번 파일" 형식으로 표시
+                        const fileName = `기존 보고서_${index + 1}.pdf`;
                         return (
                           <div key={`existing-${index}`} className={styles.referenceFile}>
                             <span>{fileName}</span>
@@ -897,7 +896,7 @@ export default function EditPage() {
                       })}
                       {referenceFiles.map((file, index) => (
                         <div key={`new-${index}`} className={styles.referenceFile}>
-                          <span>{file.name}</span>
+                          <span>새 파일: {file.name}</span>
                           <button
                             type="button"
                             onClick={() => removeReferenceFile(index)}
