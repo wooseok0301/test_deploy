@@ -12,7 +12,8 @@ import {
 } from 'firebase/storage'
 import dynamic from 'next/dynamic'
 import styles from './edit.module.css'
-import PptViewer from '../../../components/PptViewer'
+// PptViewer는 File 객체만 받는다고 가정합니다.
+// import PptViewer from '../../../components/PptViewer' // 직접 임포트 대신 dynamic import 사용
 
 const PptViewerDynamic = dynamic(() => import('@/app/components/PptViewer'), {
   ssr: false,
@@ -109,11 +110,13 @@ export default function EditPage() {
   ])
   const [pptFile, setPptFile] = useState<File | null>(null)
   const [pptUrl, setPptUrl] = useState<string>('')
+  // pptInputMode는 기존 데이터에 따라 초기화됩니다.
   const [pptInputMode, setPptInputMode] = useState<'file' | 'url' | null>(null)
   const [referenceFiles, setReferenceFiles] = useState<File[]>([])
   const [existingReferenceFiles, setExistingReferenceFiles] = useState<
     string[]
   >([])
+  // referenceInputMode도 기존 데이터에 따라 초기화됩니다.
   const [referenceInputMode, setReferenceInputMode] = useState<
     'file' | 'url' | null
   >(null)
@@ -126,7 +129,7 @@ export default function EditPage() {
   const [detailImagePreviews, setDetailImagePreviews] = useState<string[]>([])
   const [existingDetailImages, setExistingDetailImages] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false) // 클라이언트 사이드 마운트 여부
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -161,11 +164,35 @@ export default function EditPage() {
             : ''
         )
         setTeamMembers(postData.teamMembers || [])
-        setPptFile(null)
-        setPptUrl(postData.pptFileUrl || '')
-        setExistingReferenceFiles(postData.referenceFileUrls || [])
-        setWebsiteLinks(postData.websiteLinks || [])
-        setGithubLinks(postData.githubLinks || [])
+
+        // PPT 관련 초기화
+        if (postData.pptFileUrl) {
+          // 기존 PPT URL이 있다면 URL 모드로 초기화
+          setPptInputMode('url')
+          setPptUrl(postData.pptFileUrl)
+          setPptFile(null); // 기존 URL이 있다면 파일은 null
+        } else {
+          // 기존 PPT URL이 없다면 파일 업로드 모드로 초기화
+          setPptInputMode('file')
+          setPptUrl('')
+          setPptFile(null); // 파일은 일단 null
+        }
+
+        // 참고자료 관련 초기화
+        if (postData.referenceFileUrls && postData.referenceFileUrls.length > 0) {
+          // 기존 참고 자료 파일이 있다면 파일 업로드 모드로 초기화
+          setReferenceInputMode('file')
+          setExistingReferenceFiles(postData.referenceFileUrls || [])
+          setReferenceUrls(['']) // URL 입력 필드는 초기화
+        } else {
+          // 기존 참고 자료 파일이 없다면 URL 입력 모드로 초기화
+          setReferenceInputMode('url')
+          setExistingReferenceFiles([])
+          setReferenceUrls(postData.referenceFileUrls && postData.referenceFileUrls.length > 0 ? postData.referenceFileUrls : [''])
+        }
+
+        setWebsiteLinks(postData.websiteLinks && postData.websiteLinks.length > 0 ? postData.websiteLinks : [''])
+        setGithubLinks(postData.githubLinks && postData.githubLinks.length > 0 ? postData.githubLinks : [''])
         setTechStack(postData.techStack || [])
         setExistingDetailImages(postData.detailImages || [])
       } catch (error) {
@@ -180,7 +207,7 @@ export default function EditPage() {
   }, [id, router])
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true) // 클라이언트 사이드에서 컴포넌트가 마운트되었음을 표시
   }, [])
 
   const handleThumbnailChange = async (
@@ -216,7 +243,7 @@ export default function EditPage() {
   const addTeamMember = () => {
     setTeamMembers([
       ...teamMembers,
-      { name: '', role: '팀장', githubLink: '', portfolioLink: '' },
+      { name: '', role: '팀원', githubLink: '', portfolioLink: '' },
     ])
   }
 
@@ -290,27 +317,47 @@ export default function EditPage() {
         updatedAt: new Date(),
       }
 
-      // 발표자료 저장 로직 (업로드 페이지와 동일 동작)
+      // 발표자료 저장 로직
       if (pptInputMode === 'url') {
-        if (pptUrl && pptUrl.trim() !== '') {
-          updateData.pptFileUrl = pptUrl.trim()
-        }
+        updateData.pptFileUrl = pptUrl.trim() !== '' ? pptUrl.trim() : null
       } else if (pptInputMode === 'file') {
         if (pptFile) {
+          // 새 파일이 선택되었다면 업로드
           updateData.pptFileUrl = await uploadPpt(pptFile)
+        } else if (post?.pptFileUrl && !pptFile && !pptUrl) {
+          // 기존 PPT URL이 있었고, 새 파일도 URL도 없으면 기존 URL 유지 (혹은 사용자에게 삭제 확인)
+          // 여기서는 기존 URL을 유지하는 방향으로 처리
+          updateData.pptFileUrl = post.pptFileUrl;
+        } else {
+          // 파일도 없고 URL도 없으면 null
+          updateData.pptFileUrl = null;
         }
+      } else { // pptInputMode가 null인 경우 (초기 로드 시)
+        updateData.pptFileUrl = post?.pptFileUrl || null;
       }
-      // 기존 PPT 파일이 유지되는 경우는 updateData에 포함하지 않음
 
-      // 참고자료 PDF 파일들 업로드
-      let referenceFileUrls = [...existingReferenceFiles]
-      for (const file of referenceFiles) {
-        const pdfRef = ref(storage, `referenceFiles/${Date.now()}_${file.name}`)
-        await uploadBytes(pdfRef, file)
-        const url = await getDownloadURL(pdfRef)
-        referenceFileUrls.push(url)
+
+      // 참고자료 PDF 파일들 업로드 및 기존/새로운 URL 처리
+      let finalReferenceFileUrls: string[] = [];
+
+      if (referenceInputMode === 'file') {
+        // 기존에 있던 파일 URL들을 유지 (삭제하지 않은 것들)
+        finalReferenceFileUrls = [...existingReferenceFiles];
+        // 새로 업로드된 파일들 추가
+        for (const file of referenceFiles) {
+          const pdfRef = ref(storage, `referenceFiles/${Date.now()}_${file.name}`)
+          await uploadBytes(pdfRef, file)
+          const url = await getDownloadURL(pdfRef)
+          finalReferenceFileUrls.push(url)
+        }
+      } else if (referenceInputMode === 'url') {
+        // URL 모드일 경우, 새로운 URL들만 사용하고 기존 파일 URL은 모두 버림
+        finalReferenceFileUrls = referenceUrls.filter((link) => link.trim() !== '');
+      } else { // referenceInputMode가 null인 경우 (초기 로드 시)
+        finalReferenceFileUrls = post?.referenceFileUrls || [];
       }
-      updateData.referenceFileUrls = referenceFileUrls
+      updateData.referenceFileUrls = finalReferenceFileUrls;
+
 
       // 상세 이미지 업로드
       const detailImageUrls = [...existingDetailImages]
@@ -380,6 +427,8 @@ export default function EditPage() {
   }
 
   const removeExistingReferenceFile = (index: number) => {
+    // 기존 파일 제거 시 실제로 스토리지에서 삭제하는 로직은 updateDoc 이전에 추가해야 하지만,
+    // 지금은 UI에서만 제거되도록 처리합니다.
     setExistingReferenceFiles(
       existingReferenceFiles.filter((_, i) => i !== index)
     )
@@ -684,6 +733,7 @@ export default function EditPage() {
                   }`}
                   onClick={() => {
                     setPptInputMode('file')
+                    setPptUrl('') // 파일 모드로 전환 시 URL 초기화
                   }}
                 >
                   파일 업로드
@@ -695,6 +745,7 @@ export default function EditPage() {
                   }`}
                   onClick={() => {
                     setPptInputMode('url')
+                    setPptFile(null) // URL 모드로 전환 시 파일 초기화
                   }}
                 >
                   URL 입력
@@ -709,8 +760,15 @@ export default function EditPage() {
                     value={pptUrl}
                     onChange={(e) => setPptUrl(e.target.value)}
                     className={styles.input}
-                    placeholder="발표자료 링크를 입력하세요"
+                    placeholder="발표자료 링크를 입력하세요 (예: Google Slides 공유 링크)"
                   />
+                  {pptUrl && ( // URL 미리보기 또는 링크 표시
+                    <div className={styles.pptUrlPreview}>
+                      <a href={pptUrl} target="_blank" rel="noopener noreferrer">
+                        발표자료 링크 열기
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -732,7 +790,7 @@ export default function EditPage() {
                     }}
                     className={styles.fileInput}
                   />
-                  {pptFile && (
+                  {pptFile && ( // 새로 선택된 파일의 정보와 삭제 버튼
                     <div className={styles.fileInfo}>
                       <span>{pptFile.name}</span>
                       <button
@@ -744,10 +802,31 @@ export default function EditPage() {
                       </button>
                     </div>
                   )}
+                  {/* 기존 PPT URL이 있고, 현재 파일 업로드 모드이지만 새 파일이 선택되지 않았을 때 */}
+                  {post?.pptFileUrl && !pptFile && pptInputMode === 'file' && (
+                    <div className={styles.fileInfo}>
+                      <span>기존 파일: {post.pptFileUrl.split('/').pop()?.split('_').slice(1).join('_')}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const confirmDelete = window.confirm("기존 발표자료를 삭제하시겠습니까? 삭제하시면 새로 업로드하거나 URL을 입력해야 합니다.");
+                          if (confirmDelete) {
+                            // 실제 스토리지에서 삭제하는 로직은 updateDoc에서 처리합니다.
+                            // 여기서는 UI 상태만 업데이트하여 post.pptFileUrl을 빈 값으로 만듭니다.
+                            setPost(prev => prev ? {...prev, pptFileUrl: undefined} : null);
+                          }
+                        }}
+                        className={styles.removeFileButton}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
-            {pptInputMode === 'file' && pptFile && (
+            {/* PPT 파일 미리보기는 File 객체가 있을 때만 */}
+            {mounted && pptInputMode === 'file' && pptFile && (
               <div className={styles.pptPreview}>
                 <PptViewerDynamic file={pptFile} height="500px" />
               </div>
@@ -765,7 +844,10 @@ export default function EditPage() {
                   className={`${styles.toggleButton} ${
                     referenceInputMode === 'file' ? styles.active : ''
                   }`}
-                  onClick={() => setReferenceInputMode('file')}
+                  onClick={() => {
+                    setReferenceInputMode('file')
+                    setReferenceUrls(['']) // 파일 모드 전환 시 URL 초기화
+                  }}
                 >
                   파일 업로드
                 </button>
@@ -774,7 +856,11 @@ export default function EditPage() {
                   className={`${styles.toggleButton} ${
                     referenceInputMode === 'url' ? styles.active : ''
                   }`}
-                  onClick={() => setReferenceInputMode('url')}
+                  onClick={() => {
+                    setReferenceInputMode('url')
+                    setReferenceFiles([]) // URL 모드 전환 시 파일 초기화
+                    setExistingReferenceFiles([]) // URL 모드 전환 시 기존 파일 목록도 초기화
+                  }}
                 >
                   URL 입력
                 </button>
@@ -789,10 +875,28 @@ export default function EditPage() {
                     onChange={handleReferenceFilesChange}
                     className={styles.fileInput}
                   />
-                  {referenceFiles.length > 0 && (
+                  {/* 기존 파일 및 새로 추가된 파일 목록 표시 */}
+                  {(existingReferenceFiles.length > 0 || referenceFiles.length > 0) && (
                     <div className={styles.referenceFiles}>
+                      {existingReferenceFiles.map((fileUrl, index) => {
+                        const fileName =
+                          fileUrl.split('/').pop()?.split('_').slice(1).join('_') ||
+                          `기존 보고서_${index + 1}.pdf`
+                        return (
+                          <div key={`existing-${index}`} className={styles.referenceFile}>
+                            <span>{fileName}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeExistingReferenceFile(index)}
+                              className={styles.removeFileButton}
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        )
+                      })}
                       {referenceFiles.map((file, index) => (
-                        <div key={index} className={styles.referenceFile}>
+                        <div key={`new-${index}`} className={styles.referenceFile}>
                           <span>{file.name}</span>
                           <button
                             type="button"
@@ -840,27 +944,6 @@ export default function EditPage() {
                   </button>
                 </div>
               )}
-              {existingReferenceFiles.length > 0 && (
-                <div className={styles.referenceFiles}>
-                  {existingReferenceFiles.map((fileUrl, index) => {
-                    const fileName =
-                      fileUrl.split('/').pop()?.split('_').slice(1).join('_') ||
-                      `참고자료_${index + 1}.pdf`
-                    return (
-                      <div key={index} className={styles.referenceFile}>
-                        <span>{fileName}</span>
-                        <button
-                          type="button"
-                          onClick={() => removeExistingReferenceFile(index)}
-                          className={styles.removeFileButton}
-                        >
-                          삭제
-                        </button>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
             </div>
           </div>
 
@@ -888,6 +971,13 @@ export default function EditPage() {
                   )}
                 </div>
               ))}
+              <button
+                type="button"
+                onClick={addWebsiteLink}
+                className={styles.addTeamMember}
+              >
+                웹사이트 링크 추가
+              </button>
             </div>
           </div>
 
@@ -915,6 +1005,13 @@ export default function EditPage() {
                   )}
                 </div>
               ))}
+              <button
+                type="button"
+                onClick={addGithubLink}
+                className={styles.addTeamMember}
+              >
+                GitHub 링크 추가
+              </button>
             </div>
           </div>
 
@@ -941,7 +1038,7 @@ export default function EditPage() {
                 onChange={(e) => setTechStackInput(e.target.value)}
                 onKeyDown={handleTechStackKeyPress}
                 className={styles.techStackInput}
-                placeholder="기술 스택 입력"
+                placeholder="기술 스택 입력 후 Enter"
               />
             </div>
           </div>

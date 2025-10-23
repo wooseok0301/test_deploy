@@ -20,23 +20,23 @@
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  overflow: auto;
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 */
+  padding: 20px; /* 닫기 버튼과의 여백 */
+  box-sizing: border-box; /* 패딩 포함한 크기 계산 */
 }
 
 .modalImage {
-  max-width: none;
-  max-height: none;
+  max-width: 100%; /* 부모 요소의 너비를 넘지 않도록 */
+  max-height: 100%; /* 부모 요소의 높이를 넘지 않도록 */
   width: auto;
   height: auto;
-  object-fit: none;
+  object-fit: contain; /* 이미지가 잘리지 않고 모달 내에 맞도록 */
   border-radius: 4px;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: auto; /* 고품질 이미지 렌더링 */
 }
 
 .closeButton {
-  position: fixed;
+  position: absolute; /* 모달 컨텐츠에 상대적으로 위치 */
   top: 20px;
   right: 20px;
   background: rgba(0, 0, 0, 0.5);
