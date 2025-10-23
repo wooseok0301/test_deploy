@@ -82,10 +82,12 @@ export default function Signup() {
       }
     }
 
-    const actionCodeSettings = {
-      url: 'https://test02-git-main-sws010301-3386s-projects.vercel.app/verify?email=' + encodeURIComponent(email),
-      handleCodeInApp: true,
-    }
+
+  const verifyBaseUrl = process.env.NEXT_PUBLIC_VERIFY_BASE_URL || 'http://localhost:3000';
+  const actionCodeSettings = {
+    url: `${verifyBaseUrl}/verify?email=` + encodeURIComponent(email),
+    handleCodeInApp: true,
+  };
 
     try {
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
