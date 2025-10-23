@@ -2,12 +2,12 @@ import styles from './team.module.css'; // CSS 모듈 임포트
 
 export default function TeamPage() {
   const teamMembers = [
-    { name: '신건훈', studentId: '92015192', imageUrl: '/images/man3.jpg' }, // 이미지 경로 수정
-    { name: '조혜선', studentId: '92113865', imageUrl: '/images/hair.jpg' }, // 이미지 경로 수정
-    { name: '서우석', studentId: '92015178', imageUrl: '/images/man.jpg' }, // 이미지 경로 수정
-    { name: '최윤지', studentId: '92213122', imageUrl: '/images/pony.jpg' }, // 이미지 경로 수정
-    { name: '최효영', studentId: '91914391', imageUrl: '/images/man2.jpg' }, // 이미지 경로 수정
-    { name: '박이슬', studentId: '92450524', imageUrl: '/images/glass.jpg' }, // 이미지 경로 수정
+    { name: '신건훈', studentId: '92015192', imageUrl: '/images/1.png' }, // 이미지 경로 수정
+    { name: '조혜선', studentId: '92113865', imageUrl: '/images/2.png' }, // 이미지 경로 수정
+    { name: '서우석', studentId: '92015178', imageUrl: '/images/3.png' }, // 이미지 경로 수정
+    { name: '최윤지', studentId: '92213122', imageUrl: '/images/4.png' }, // 이미지 경로 수정
+    { name: '최효영', studentId: '91914391', imageUrl: '/images/5.png' }, // 이미지 경로 수정
+    { name: '박이슬', studentId: '92450524', imageUrl: '/images/6.png' }, // 이미지 경로 수정
   ];
 
   return (
