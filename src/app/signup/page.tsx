@@ -82,12 +82,10 @@ export default function Signup() {
       }
     }
 
-
-  const verifyBaseUrl = process.env.NEXT_PUBLIC_VERIFY_BASE_URL || 'http://localhost:3000';
-  const actionCodeSettings = {
-    url: `${verifyBaseUrl}/verify?email=` + encodeURIComponent(email),
-    handleCodeInApp: true,
-  };
+    const actionCodeSettings = {
+      url: 'http://management-service-fcfe3.firebaseapp.com/verify?email=' + encodeURIComponent(email),
+      handleCodeInApp: true,
+    }
 
     try {
       await sendSignInLinkToEmail(auth, email, actionCodeSettings)
