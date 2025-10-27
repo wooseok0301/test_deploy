@@ -56,12 +56,12 @@ interface Banner {
   year?: string
 }
 
-// 팝업 데이터 인터페이스 정의
+
 interface PopupItem {
   imageUrl: string
   title: string
   description: string
-  link: string // 클릭 시 이동할 링크
+  link: string 
 }
 
 
