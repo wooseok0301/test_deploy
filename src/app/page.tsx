@@ -68,7 +68,7 @@ interface PopupItem {
 const POPUP_DATA: PopupItem[] = [
   {
     imageUrl: '/popup1.png',
-    title: '졸업 작품 발표 업로드',
+    title: '졸업 작품 업로드',
     description: '클릭시 업로드 사이트로 이동됩니다.',
     link: '/upload', 
   },

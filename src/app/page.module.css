@@ -902,20 +902,20 @@
     top: -5px;
     right: -5px;
   }
-}
-.popupOverlay {
+}.popupOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); 
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 9999;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
-
 
 .popupContent {
   background-color: #fff;
@@ -926,15 +926,58 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; 
+  gap: 10px;
+  max-width: 420px;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
+  margin: auto;
 }
 
+.popupHeader {
+  width: 100%;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.popupTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+  text-align: center;
+  padding: 0 10px;
+  word-break: keep-all;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.popupDescription {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 10px;
+  word-break: keep-all;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.popupContent a {
+  display: block;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
 
 .popupImage {
-  width: 400px; 
+  width: 400px;
   height: 600px;
-  object-fit: cover; 
+  object-fit: cover;
   border-radius: 4px;
+  display: block;
 }
 
 .popupNavButtonLeft,
@@ -948,7 +991,7 @@
   padding: 10px 15px;
   cursor: pointer;
   font-size: 1.5rem;
-  z-index: 1001; 
+  z-index: 1001;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -965,11 +1008,11 @@
 }
 
 .popupNavButtonLeft {
-  left: 10px; 
+  left: 10px;
 }
 
 .popupNavButtonRight {
-  right: 10px; 
+  right: 10px;
 }
 
 .popupActions {
@@ -978,6 +1021,7 @@
   width: 100%;
   padding-top: 10px;
   border-top: 1px solid #eee;
+  box-sizing: border-box;
 }
 
 .popupActions button {
@@ -989,25 +1033,35 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  flex-grow: 1;
+  margin: 0 5px;
+  box-sizing: border-box;
+}
+
+.popupActions button:first-child {
+  margin-left: 0;
+}
+
+.popupActions button:last-child {
+  margin-right: 0;
+  background-color: #6c757d;
 }
 
 .popupActions button:hover {
   background-color: #242424;
 }
 
-.popupActions button:last-child {
-  background-color: #6c757d;
-}
-
 .popupActions button:last-child:hover {
   background-color: #5a6268;
 }
+
 @media (max-width: 768px) {
   .popupContent {
     padding: 15px;
     max-width: 90%;
-    width: auto;
+    width: 100%;
     gap: 8px;
+    margin: auto;
   }
 
   .popupImage {
@@ -1015,6 +1069,7 @@
     max-width: 300px;
     height: auto;
     aspect-ratio: 2 / 3;
+    object-fit: contain;
   }
 
   .popupContent a {
@@ -1028,21 +1083,22 @@
   .popupTitle {
     font-size: 1.4rem;
     margin-bottom: 5px;
+    padding: 0 5px;
   }
 
   .popupDescription {
     font-size: 0.85rem;
     margin-bottom: 10px;
+    padding: 0 5px;
   }
 
   .popupNavButtonLeft,
   .popupNavButtonRight {
-    width: 30px;
-    height: 30px;
-    font-size: 1.2rem;
-    padding: 5px 8px;
-    top: 35%;
-    opacity: 0.7;
+    width: 35px;
+    height: 35px;
+    font-size: 1.3rem;
+    top: 45%;
+    opacity: 0.8;
   }
 
   .popupNavButtonLeft {
@@ -1070,13 +1126,27 @@
 @media (max-width: 480px) {
   .popupContent {
     padding: 10px;
+    gap: 5px;
   }
+
   .popupTitle {
     font-size: 1.2rem;
+    margin-bottom: 3px;
   }
+
   .popupDescription {
     font-size: 0.8rem;
+    margin-bottom: 8px;
   }
+
+  .popupNavButtonLeft,
+  .popupNavButtonRight {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+    top: 40%;
+  }
+
   .popupActions button {
     font-size: 0.75rem;
     padding: 8px;
