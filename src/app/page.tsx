@@ -1,9 +1,8 @@
-//\app\page.tsx
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '@/firebase/firebase'
 import {
   collection,
@@ -14,8 +13,6 @@ import {
   query,
   updateDoc,
   increment,
-  arrayUnion,
-  arrayRemove,
   where,
   limit,
   startAfter,
@@ -23,7 +20,6 @@ import {
 import Link from 'next/link'
 import styles from './page.module.css'
 import { toast } from 'react-hot-toast'
-import FloatingButton from './components/FloatingButton'
 import Hero from './components/Hero'
 
 interface Post {
@@ -60,10 +56,29 @@ interface Banner {
   year?: string
 }
 
+// 팝업 데이터 인터페이스 정의
+interface PopupItem {
+  imageUrl: string
+  title: string
+  description: string
+  link: string // 클릭 시 이동할 링크
+}
+
+
+const POPUP_DATA: PopupItem[] = [
+  {
+    imageUrl: '/popup1.png',
+    title: '졸업 작품 발표 업로드',
+    description: '클릭시 업로드 사이트로 이동됩니다.',
+    link: '/upload', 
+  },
+]
+
+const POPUP_LOCAL_STORAGE_KEY = 'hideMainPagePopupsUntil'
+
 export default function Home() {
   const router = useRouter()
-  //const [loading, setLoading] = useState(true)
-  const [loadingPosts, setLoadingPosts] = useState(true); // 게시물 로딩 전용 상태 추가
+  const [loadingPosts, setLoadingPosts] = useState(true) // 게시물 로딩 전용 상태 추가
   const [posts, setPosts] = useState<Post[]>([])
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [userDisplayName, setUserDisplayName] = useState<string | undefined>(
@@ -74,8 +89,11 @@ export default function Home() {
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false)
   const [lastDoc, setLastDoc] = useState<any>(null)
   const [hasMore, setHasMore] = useState(true)
-  const observer = useRef<IntersectionObserver | null>(null)
   const POSTS_PER_PAGE = 9
+
+  // 팝업 관련 상태
+  const [showPopup, setShowPopup] = useState(false)
+  const [currentPopupIndex, setCurrentPopupIndex] = useState(0) // 이미지 인덱스 대신 팝업 데이터 인덱스
 
   // 로그인 상태 확인
   useEffect(() => {
@@ -92,7 +110,6 @@ export default function Home() {
               user.email.split('@')[0]
           )
         } else {
-          // 회원가입이 완료되지 않은 사용자도 메인 페이지를 볼 수 있도록 함
           setCurrentUser(user)
           setUserDisplayName(user.email.split('@')[0])
         }
@@ -100,18 +117,65 @@ export default function Home() {
         setCurrentUser(null)
         setUserDisplayName(undefined)
       }
-      // setLoading(false)
     })
 
     return () => unsubscribe()
   }, [router])
 
+  // 팝업 표시 로직
+  useEffect(() => {
+    const hideUntil = localStorage.getItem(POPUP_LOCAL_STORAGE_KEY)
+    if (hideUntil) {
+      const hideTimestamp = parseInt(hideUntil, 10)
+      if (Date.now() < hideTimestamp) {
+        setShowPopup(false)
+        return
+      }
+    }
+    // 24시간이 지났거나, 설정된 적이 없으면 팝업 표시
+    if (POPUP_DATA.length > 0) { // POPUP_IMAGES 대신 POPUP_DATA 확인
+      setShowPopup(true)
+    }
+  }, [])
+
+  const handleClosePopup = () => {
+    setShowPopup(false)
+  }
+
+  const handleHidePopupFor24Hours = () => {
+    const twentyFourHours = 24 * 60 * 60 * 1000 // 24시간 밀리초
+    const hideUntilTimestamp = Date.now() + twentyFourHours
+    localStorage.setItem(
+      POPUP_LOCAL_STORAGE_KEY,
+      hideUntilTimestamp.toString()
+    )
+    setShowPopup(false)
+    toast.success('24시간 동안 팝업이 나타나지 않습니다.')
+  }
+
+  const handleNextPopup = () => {
+    setCurrentPopupIndex((prevIndex) =>
+      prevIndex === POPUP_DATA.length - 1 ? 0 : prevIndex + 1
+    )
+  }
+
+  const handlePrevPopup = () => {
+    setCurrentPopupIndex((prevIndex) =>
+      prevIndex === 0 ? POPUP_DATA.length - 1 : prevIndex - 1
+    )
+  }
+
+  const handlePopupClick = (link: string) => {
+    router.push(link)
+    setShowPopup(false) // 팝업 클릭 시 닫기
+  }
+
   // 게시물 불러오기
   const fetchPosts = async (isInitial: boolean = false) => {
     if (isInitial) {
-        setLoadingPosts(true); // 게시물 로딩 시작
+      setLoadingPosts(true) // 게시물 로딩 시작
     } else {
-        setLoadingMore(true);
+      setLoadingMore(true)
     }
     try {
       let q
@@ -135,6 +199,7 @@ export default function Home() {
       if (querySnapshot.empty) {
         setHasMore(false)
         setShowLoadMoreButton(false)
+        if (isInitial) setPosts([]) // 초기 로드 시 게시물이 없으면 빈 배열로 설정
         return
       }
 
@@ -144,49 +209,18 @@ export default function Home() {
         querySnapshot.docs.map(async (docSnapshot) => {
           const postData = docSnapshot.data() as any
 
-          // 댓글 수 가져오기
+          // 댓글 수 가져오기 (필요하다면 추가)
           const commentsSnapshot = await getDocs(
             collection(db, 'posts', docSnapshot.id, 'comments')
           )
           const commentsCount = commentsSnapshot.size
 
-          // author 정보가 없는 경우 처리
-          if (!postData.author) {
-            return {
-              id: docSnapshot.id,
-              ...postData,
-              author: {
-                name: '익명',
-                email: 'unknown',
-              },
-              likes: postData.likes || [],
-              views: postData.views || 0,
-              comments: commentsCount,
-            } as Post
-          }
-
-          // author.email 정보가 없는 경우 처리
-          if (!postData.author.email) {
-            return {
-              id: docSnapshot.id,
-              ...postData,
-              author: {
-                ...postData.author,
-                name: postData.author.name || '익명',
-                email: 'unknown',
-              },
-              likes: postData.likes || [],
-              views: postData.views || 0,
-              comments: commentsCount,
-            } as Post
-          }
-
           return {
             id: docSnapshot.id,
             ...postData,
             author: {
-              name: postData.author.name || '익명',
-              email: postData.author.email,
+              name: postData.author?.name || '익명',
+              email: postData.author?.email || 'unknown',
             },
             likes: postData.likes || [],
             views: postData.views || 0,
@@ -199,19 +233,24 @@ export default function Home() {
         isInitial ? postsData : [...prevPosts, ...postsData]
       )
 
-      // 9개 이상의 게시물이 있으면 화살표 버튼 표시
-      if (isInitial && postsData.length === POSTS_PER_PAGE) {
-        setShowLoadMoreButton(true)
+      if (isInitial) {
+        setShowLoadMoreButton(postsData.length === POSTS_PER_PAGE)
       }
     } catch (error) {
       console.error('게시물 로딩 중 오류:', error)
       toast.error('게시물을 불러오는 중 오류가 발생했습니다.')
+    } finally {
+      if (isInitial) {
+        setLoadingPosts(false) // 게시물 로딩 완료
+      } else {
+        setLoadingMore(false)
+      }
     }
   }
 
   // 초기 게시물 로드
   useEffect(() => {
-    fetchPosts(true);
+    fetchPosts(true)
   }, [])
 
   // 수동으로 더 많은 게시물 로드
@@ -226,7 +265,7 @@ export default function Home() {
     }
   }
 
-  // 스크롤 이벤트 리스너 추가
+  // 스크롤 이벤트 리스너 추가 (intersection observer로 대체 가능, 여기서는 기존 로직 유지)
   useEffect(() => {
     const handleScroll = () => {
       if (showLoadMoreButton && !loadingMore && hasMore) {
@@ -235,9 +274,10 @@ export default function Home() {
         const windowHeight = window.innerHeight
         const documentHeight = document.documentElement.scrollHeight
 
-        // 스크롤이 페이지 하단 근처에 도달했을 때
         if (scrollTop + windowHeight >= documentHeight - 100) {
-          setShowLoadMoreButton(true)
+          // 스크롤이 하단에 가까워지면 '더보기' 버튼을 표시 (또는 자동 로드 트리거)
+          // 여기서는 버튼을 표시하는 대신, 스크롤이 감지되면 자동으로 로드하도록 변경할 수도 있습니다.
+          // 현재 로직은 showLoadMoreButton이 true일 때만 작동하며, 이미 true라면 추가적인 동작은 없습니다.
         }
       }
     }
@@ -263,10 +303,7 @@ export default function Home() {
           ...doc.data(),
         })) as Banner[]
 
-        // year 필드가 없는 배너만 필터링 (메인 페이지용)
         const mainPageBanners = bannersData.filter((banner) => !banner.year)
-
-        // order 기준으로 정렬
         setBanners(mainPageBanners.sort((a, b) => a.order - b.order))
       } catch (error) {
         console.error('배너 로딩 중 오류:', error)
@@ -283,7 +320,6 @@ export default function Home() {
         views: increment(1),
       })
 
-      // 게시물 목록 업데이트
       setPosts((prevPosts) =>
         prevPosts.map((post) => {
           if (post.id === postId) {
@@ -324,7 +360,6 @@ export default function Home() {
         likes: newLikes,
       })
 
-      // 게시물 목록 업데이트
       setPosts((prevPosts) =>
         prevPosts.map((post) => {
           if (post.id === postId) {
@@ -348,17 +383,64 @@ export default function Home() {
     }
   }
 
+  const currentPopup = POPUP_DATA[currentPopupIndex];
+
   return (
     <div className={styles.container}>
+      {showPopup && POPUP_DATA.length > 0 && currentPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popupContent}>
+            <div className={styles.popupHeader}>
+              <h2 className={styles.popupTitle}>{currentPopup.title}</h2>
+            </div>
+            {/* 이미지 클릭 시 링크 이동 */}
+            <a href={currentPopup.link} onClick={(e) => {
+                e.preventDefault(); // 기본 링크 이동 방지
+                handlePopupClick(currentPopup.link);
+              }}>
+              <img
+                src={currentPopup.imageUrl}
+                alt={currentPopup.title}
+                className={styles.popupImage}
+              />
+            </a>
+            <p className={styles.popupDescription}>{currentPopup.description}</p>
+            
+            {POPUP_DATA.length > 1 && (
+              <>
+                <button
+                  className={styles.popupNavButtonLeft}
+                  onClick={handlePrevPopup}
+                >
+                  &lt;
+                </button>
+                <button
+                  className={styles.popupNavButtonRight}
+                  onClick={handleNextPopup}
+                >
+                  &gt;
+                </button>
+              </>
+            )}
+            <div className={styles.popupActions}>
+              <button onClick={handleHidePopupFor24Hours}>
+                24시간 동안 다시 보지 않기
+              </button>
+              <button onClick={handleClosePopup}>닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Hero userName={userDisplayName} />
-      {/* 메인 콘텐츠 영역: 왼쪽 여백, 중앙 게시물, 오른쪽 배너 */}
       <div className={styles.contentColumnsWrapper}>
         <div className={styles.leftSpace} />
         <div className={styles.mainContent}>
-          
           <div className={styles.postsGrid}>
-            {posts.length === 0 ? (
+            {loadingPosts ? (
               <p>게시물을 불러오는 중입니다.</p>
+            ) : posts.length === 0 ? (
+              <p>표시할 게시물이 없습니다.</p>
             ) : (
               posts.map((post, index) => (
                 <div key={post.id} className={styles.card}>
