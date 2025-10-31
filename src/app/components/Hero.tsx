@@ -8,6 +8,8 @@ interface HeroProps {
 }
 
 export default function Hero({ userName }: HeroProps) {
+  const currentYear = new Date().getFullYear()
+
   return (
     <section className={styles.hero} aria-label="메인 히어로">
       <div className={styles.inner}>
@@ -30,6 +32,9 @@ export default function Hero({ userName }: HeroProps) {
             </Link>
             <Link href="/yearly" className={styles.secondaryCta}>
               연도별 보기
+            </Link>
+            <Link href={`/yearly?year=${currentYear}`} className={styles.secondaryCta}>
+              졸업 작품 보러가기 ({currentYear}년)
             </Link>
           </div>
         </div>
