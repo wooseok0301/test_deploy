@@ -109,11 +109,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 효과 */
 }
 
-.rewardItem:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
-}
-
 .rewardTitle {
   font-size: 1.65rem; /* 폰트 크기 키움 */
   font-weight: 700; /* 더욱 강조 */
