@@ -1,4 +1,5 @@
 import styles from './event.module.css'; 
+  const currentYear = new Date().getFullYear()
 
 export default function EventAnnouncementsPage() {
   return (
@@ -38,8 +39,10 @@ export default function EventAnnouncementsPage() {
         </div>
 
         <p className={styles.closingRemarks}>
-          지금 바로 참여하세요!
-        </p>
+          <a href={`/yearly?year=${currentYear}`} className={styles.secondaryCta}>
+              ( 졸업 작품 보러가기 )
+            </a>
+        </p>            
       </div>
     </div>
   );

@@ -139,6 +139,9 @@
   border-top: 2px solid #e0e0e0; /* 구분선 두께 및 색상 변경 */
   letter-spacing: -0.02em; /* 살짝 자간 줄임 */
 }
+.closingRemarks a{
+  color: #007bff;
+}
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
