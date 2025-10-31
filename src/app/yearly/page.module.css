@@ -144,7 +144,7 @@
 .rightBanner {
   width: 300px;
   position: sticky;
-  top: 5.5rem;
+  top: 3px;
   height: fit-content;
   background: transparent;
   padding: 0;
@@ -152,6 +152,7 @@
   flex-direction: column;
   gap: 1rem;
   flex-shrink: 0;
+  margin-bottom: 30px;
 }
 
 .mainContent {
