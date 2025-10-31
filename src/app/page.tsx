@@ -67,10 +67,10 @@ interface PopupItem {
 
 const POPUP_DATA: PopupItem[] = [
   {
-    imageUrl: '/popup1.png',
-    title: '졸업 작품 업로드',
-    description: '11월2일까지 업로드 해주세요. 클릭시 이동됩니다',
-    link: '/upload', 
+    imageUrl: '/popup4.png',
+    title: '2025년 제21회 정보보호학과 졸업작품전시회',
+    description: '행사 진행 11/4 ~ 11/5',
+    link: '/yearly?year=2025', 
   },
   {
     imageUrl: '/popup2.png',
@@ -83,6 +83,12 @@ const POPUP_DATA: PopupItem[] = [
     title: '2025년 제21회 정보보호학과 졸업작품전시회',
     description: '행사 진행 11/4 ~ 11/5',
     link: '/yearly?year=2025', 
+  },
+    {
+    imageUrl: '/popup1.png',
+    title: '졸업 작품 업로드',
+    description: '11월2일까지 업로드 해주세요. 클릭시 이동됩니다',
+    link: '/upload', 
   },
 ]
 
