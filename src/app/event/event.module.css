@@ -63,7 +63,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  text-align: left; /* 리스트 항목은 다시 왼쪽 정렬 */
+  text-align: center; /* 리스트 항목은 다시 왼쪽 정렬 */
   max-width: 600px; /* 리스트 너비 제한하여 중앙에 배치 */
   margin-left: auto;
   margin-right: auto;
@@ -84,7 +84,6 @@
 }
 
 .participationList li::before {
-  content: '✨'; /* 더 모던하고 눈에 띄는 이모지 아이콘으로 변경 */
   position: absolute;
   left: 0;
   color: #ffc107; /* 아이콘 색상 변경 (노란색 계열) */
