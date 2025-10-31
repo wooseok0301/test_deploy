@@ -259,6 +259,14 @@ export default function Header() {
           >
             팀원 소개
           </Link>
+          <Link
+            href="/event"
+            className={`${styles.navItem} ${
+              pathname === '/event' ? styles.active : ''
+            }`}
+          >
+            이벤트안내
+          </Link>
         </nav>
         <div className={styles.authSection}>
           {user ? (

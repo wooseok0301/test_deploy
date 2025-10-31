@@ -1,0 +1,238 @@
+.container {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 60px 20px;
+  min-height: 100vh;
+  color: #333;
+}
+
+.title {
+  text-align: center;
+  font-size: 3.2rem; /* 제목 폰트 크기 살짝 키움 */
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 70px; /* 제목과 내용 섹션 간 여백 증가 */
+  letter-spacing: -0.05em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* 제목에 은은한 그림자 추가 */
+}
+
+.contentSection {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 16px; /* 모서리 둥글기를 살짝 더 주어 부드러운 느낌 */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* 그림자를 더 부드럽고 깊게 */
+  padding: 50px 40px; /* 패딩 증가 */
+  border: none; /* border 제거, shadow로 대체 */
+}
+
+.eventImage {
+  width: 100%;
+  height: auto;
+  border-radius: 12px; /* 이미지 모서리 둥글게 */
+  margin-bottom: 45px;
+}
+
+.description {
+  font-size: 1.2rem; /* 설명 폰트 크기 살짝 키움 */
+  line-height: 1.8; /* 줄 간격 넓혀 가독성 향상 */
+  color: #444; /* 색상 살짝 진하게 */
+  margin-bottom: 50px; /* 여백 증가 */
+  text-align: center;
+}
+
+.announcementCard {
+  background-color: #fdfdfd; /* 더욱 밝고 깨끗한 배경색 */
+  border-radius: 12px; /* 모서리 둥글기 */
+  padding: 40px; /* 패딩 증가 */
+  margin-bottom: 50px; /* 여백 증가 */
+  border: 1px solid #e9ecef; /* 은은한 테두리 유지 */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 카드 자체에 은은한 그림자 */
+}
+
+.cardTitle {
+  font-size: 2rem; /* 제목 폰트 크기 키움 */
+  font-weight: 700; /* 더욱 강조 */
+  color: #343a40;
+  margin-bottom: 25px; /* 여백 증가 */
+  text-align: center;
+}
+
+.participationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left; /* 리스트 항목은 다시 왼쪽 정렬 */
+  max-width: 600px; /* 리스트 너비 제한하여 중앙에 배치 */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.participationList li {
+  font-size: 1.1rem; /* 폰트 크기 살짝 키움 */
+  line-height: 2; /* 줄 간격 더욱 넓혀 가독성 극대화 */
+  color: #555;
+  margin-bottom: 12px;
+  padding-left: 30px; /* 아이콘 공간 더 확보 */
+  position: relative;
+  transition: color 0.2s ease; /* 호버 효과 */
+}
+
+.participationList li:last-child {
+  margin-bottom: 0; /* 마지막 항목 하단 여백 제거 */
+}
+
+.participationList li::before {
+  content: '✨'; /* 더 모던하고 눈에 띄는 이모지 아이콘으로 변경 */
+  position: absolute;
+  left: 0;
+  color: #ffc107; /* 아이콘 색상 변경 (노란색 계열) */
+  font-size: 1.2em; /* 아이콘 크기 살짝 키움 */
+}
+
+.rewardsSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 최소 너비 살짝 키움 */
+  gap: 40px; /* 간격 증가 */
+  margin-bottom: 60px; /* 여백 증가 */
+  padding-top: 20px; /* 상단 여백 추가 */
+}
+
+.rewardItem {
+  background-color: #fdfdfd; /* 더욱 밝고 깨끗한 배경색 */
+  border-radius: 12px; /* 모서리 둥글기 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06); /* 그림자를 더 부드럽고 깊게 */
+  padding: 35px; /* 패딩 증가 */
+  text-align: center;
+  border: none; /* border 제거, shadow로 대체 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 효과 */
+}
+
+.rewardItem:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+}
+
+.rewardTitle {
+  font-size: 1.65rem; /* 폰트 크기 키움 */
+  font-weight: 700; /* 더욱 강조 */
+  color: #343a40;
+  margin-bottom: 18px; /* 여백 조정 */
+}
+
+.rewardDetail {
+  font-size: 1.1rem; /* 폰트 크기 키움 */
+  color: #606060; /* 색상 살짝 진하게 */
+  line-height: 1.7; /* 줄 간격 넓힘 */
+}
+
+.highlight {
+  color: #007bff;
+  font-weight: 700;
+  text-decoration: underline; /* 강조 부분에 밑줄 추가 */
+  text-underline-offset: 4px; /* 밑줄 위치 조정 */
+}
+
+.closingRemarks {
+  font-size: 1.3rem; /* 폰트 크기 키움 */
+  font-weight: 600; /* 더욱 강조 */
+  color: #343a40; /* 색상 진하게 */
+  margin-top: 60px; /* 여백 증가 */
+  text-align: center;
+  padding-top: 30px; /* 상단 여백 증가 */
+  border-top: 2px solid #e0e0e0; /* 구분선 두께 및 색상 변경 */
+  letter-spacing: -0.02em; /* 살짝 자간 줄임 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+  }
+  .contentSection {
+    padding: 40px 25px;
+  }
+  .description {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+  }
+  .announcementCard {
+    padding: 30px 20px;
+    margin-bottom: 40px;
+  }
+  .cardTitle {
+    font-size: 1.7rem;
+  }
+  .participationList li {
+    font-size: 1rem;
+    padding-left: 25px;
+  }
+  .participationList li::before {
+    font-size: 1.1em;
+  }
+  .rewardsSection {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .rewardItem {
+    padding: 30px;
+  }
+  .rewardTitle {
+    font-size: 1.5rem;
+  }
+  .rewardDetail {
+    font-size: 1rem;
+  }
+  .closingRemarks {
+    font-size: 1.2rem;
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 40px 15px;
+  }
+  .title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  .contentSection {
+    padding: 30px 20px;
+  }
+  .description {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+  .announcementCard {
+    padding: 25px 15px;
+  }
+  .cardTitle {
+    font-size: 1.4rem;
+  }
+  .participationList {
+    max-width: 100%; /* 모바일에서는 너비 제한 해제 */
+  }
+  .participationList li {
+    font-size: 0.95rem;
+    padding-left: 20px;
+  }
+  .rewardsSection {
+    gap: 20px;
+  }
+  .rewardItem {
+    padding: 25px;
+  }
+  .rewardTitle {
+    font-size: 1.3rem;
+  }
+  .rewardDetail {
+    font-size: 0.95rem;
+  }
+  .closingRemarks {
+    font-size: 1.1rem;
+    margin-top: 40px;
+  }
+}
