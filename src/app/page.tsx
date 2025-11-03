@@ -67,6 +67,12 @@ interface PopupItem {
 
 const POPUP_DATA: PopupItem[] = [
   {
+    imageUrl: '/popup1.png',
+    title: '졸업 작품 업로드',
+    description: '회원가입 이메일 인증하시는 분들은 스팸 메일함 확인 부탁드립니다\n추가로 이메일 인증 오류가 생기신 분들은\n 010-3277-0301 연락처로\n 이메일,비밀번호,이름 정보를 보내주시면\n아이디 생성도와드리도록 하겠습니다.',
+    link: '/upload', 
+  },
+  {
     imageUrl: '/popup4.png',
     title: '2025년 제21회 정보보호학과 졸업작품전시회',
     description: '행사 진행 11/4 ~ 11/5',
@@ -89,12 +95,6 @@ const POPUP_DATA: PopupItem[] = [
     title: '재학생 참여 이벤트',
     description: '본 서비스는 4학년 졸업작품 프로젝트팀과 \n재학생들간의 교류를 증진하기 위해 만들어졌습니다. \n회원가입 하시고 좋아요와 댓글로 많은 참여 바랍니다. \n가장 많은 좋아요, 댓글을 받아 명예의 전당에 선정된 3팀에게 학과장상을 시상합니다. \n정성스런 댓글을 작성한 3명을 선정하여 문화상품권을 증정합니다',
     link: '/event', 
-  },
-    {
-    imageUrl: '/popup1.png',
-    title: '졸업 작품 업로드',
-    description: '11월2일까지 업로드 해주세요. 클릭시 이동됩니다',
-    link: '/upload', 
   },
 ]
 
