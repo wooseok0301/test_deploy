@@ -66,12 +66,12 @@ interface PopupItem {
 
 
 const POPUP_DATA: PopupItem[] = [
-  {
+  /*{
     imageUrl: '/popup1.png',
     title: '졸업 작품 업로드',
     description: '회원가입 이메일 인증하시는 분들은 스팸 메일함 확인 부탁드립니다\n추가로 이메일 인증 오류가 생기신 분들은\n 010-3277-0301 연락처로\n 이메일,비밀번호,이름 정보를 보내주시면\n아이디 생성도와드리도록 하겠습니다.',
     link: '/upload', 
-  },
+  },*/
   {
     imageUrl: '/popup4.png',
     title: '2025년 제21회 정보보호학과 졸업작품전시회',
