@@ -1,0 +1,106 @@
+.pageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.infoText {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #555;
+}
+
+.infoText strong {
+  color: #0070f3;
+}
+
+.input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+}
+
+.button {
+  padding: 12px 20px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: #454545;
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.backButton {
+  padding: 12px 20px;
+  background-color: #6c757d; /* 회색 계열 */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px; /* 이름 변경 버튼과의 간격 */
+}
+
+.backButton:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.backButton:active {
+  transform: translateY(0);
+}
+
+.error {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: -10px; /* input과의 간격 조절 */
+  text-align: left;
+}
