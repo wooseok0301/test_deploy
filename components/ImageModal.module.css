@@ -1,0 +1,65 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  position: relative;
+  width: 95vw;
+  height: 95vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 */
+  padding: 20px; /* 닫기 버튼과의 여백 */
+  box-sizing: border-box; /* 패딩 포함한 크기 계산 */
+}
+
+.modalImage {
+  max-width: 100%; /* 부모 요소의 너비를 넘지 않도록 */
+  max-height: 100%; /* 부모 요소의 높이를 넘지 않도록 */
+  width: auto;
+  height: auto;
+  object-fit: contain; /* 이미지가 잘리지 않고 모달 내에 맞도록 */
+  border-radius: 4px;
+  image-rendering: auto; /* 고품질 이미지 렌더링 */
+}
+
+.closeButton {
+  position: absolute; /* 모달 컨텐츠에 상대적으로 위치 */
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  z-index: 1001;
+}
+
+.closeButton:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.closeButton svg {
+  width: 24px;
+  height: 24px;
+}
