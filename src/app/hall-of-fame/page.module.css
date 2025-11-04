@@ -117,7 +117,8 @@
 }
 
 /* MODIFIED CARD STYLES BELOW */
-.postCard { /* Renamed from .card for podium items to distinguish from grid cards */
+.postCard {
+  /* Renamed from .card for podium items to distinguish from grid cards */
   background-color: #ffffff;
   border-radius: 15px; /* Increased border-radius */
   display: flex;
@@ -169,7 +170,6 @@
   transform: translateY(-60px);
   transition: transform 0.3s ease;
 }
-
 
 .rank {
   font-size: 1.5rem;
@@ -773,7 +773,6 @@
     max-width: 100%;
   }
 }
-
 @media (max-width: 900px) {
   .postsGrid {
     grid-template-columns: 1fr;
@@ -781,38 +780,61 @@
     gap: 25px;
   }
 
-  .card {
-    min-height: 450px; /* Adjusted min-height */
-    height: auto; /* Allow height to adjust */
+  /* 명예의 전당 `.podium` 섹션에 대한 모바일 스타일 */
+  .podium {
+    flex-direction: column; /* 세로로 나열 */
+    align-items: center; /* 가운데 정렬 */
+    gap: 3rem; /* 게시물 간 간격 조정 */
+    margin-top: 5rem; /* 상단 여백 조정 */
+    min-height: auto; /* 최소 높이 제거 (콘텐츠에 따라 유동적으로) */
   }
 
-  .imageContainer {
-    height: 240px; /* Fixed height for image */
-    padding-bottom: 0; /* Remove padding-bottom for fixed height */
+  .podiumItem {
+    width: 90%; /* 모바일에서 너비 조정 */
+    max-width: 350px; /* 최대 너비 설정 */
+    transform: none !important; /* 기존 transform 무효화 */
   }
 
-  .loadMoreContainer {
-    max-width: 450px;
+  .podiumItem.first {
+    order: 1; /* 1등을 가장 먼저 표시 */
   }
 
-  .header {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+  .podiumItem.second {
+    order: 2; /* 2등을 그 다음 표시 */
   }
 
-  .authBox {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+  .podiumItem.third {
+    order: 3; /* 3등을 마지막에 표시 */
   }
 
-  .title {
-    font-size: 1.8rem;
+  .rankBadge {
+    top: -20px; /* 배지 위치 조정 */
+    left: 50%; /* 가운데 정렬 */
+    transform: translateX(-50%);
+    flex-direction: row; /* 배지 내용 가로로 나열 */
+    gap: 10px; /* 배지 내 요소 간 간격 */
+    border: 2px solid #ddd; /* 배지 테두리 일반화 */
+    min-width: 150px;
   }
 
-  .searchBox {
-    width: 80%;
+  .podiumItem.first .postCard {
+    transform: none; /* 스케일 효과 제거 */
+  }
+
+  .podiumItem:hover {
+    transform: none; /* 호버 효과 제거 */
+  }
+
+  .podiumItem.first:hover {
+    transform: none;
+  }
+
+  .podiumItem.second:hover {
+    transform: none;
+  }
+
+  .podiumItem.third:hover {
+    transform: none;
   }
 }
 
