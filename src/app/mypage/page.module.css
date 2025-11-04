@@ -393,3 +393,20 @@
 .editProfileButton:hover {
   background-color: #13131349;
 }
+
+.editNameButton {
+  background-color: #474747; /* 파란색 계열 */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  margin-top: 5px; /* 이름 아래에 약간의 여백 */
+  margin-bottom: 5px; /* 가입일 위에 약간의 여백 */
+}
+
+.editNameButton:hover {
+  background-color: #080808;
+}

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { auth, db } from '@/firebase/firebase'
-import { User } from 'firebase/auth'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { auth, db } from '@/firebase/firebase';
+import { User } from 'firebase/auth';
 import {
   collection,
   query,
@@ -16,122 +16,122 @@ import {
   arrayRemove,
   arrayUnion,
   increment,
-} from 'firebase/firestore'
-import Link from 'next/link'
-import styles from './page.module.css'
-import { toast } from 'react-hot-toast'
+} from 'firebase/firestore';
+import Link from 'next/link';
+import styles from './page.module.css';
+import { toast } from 'react-hot-toast';
 
 interface Post {
-  id: string
-  title: string
-  content: string
-  imageUrl?: string
+  id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
   author: {
-    name: string
-    email: string
-  }
-  likes: string[]
-  views: number
+    name: string;
+    email: string;
+  };
+  likes: string[];
+  views: number;
   createdAt: {
-    toDate: () => Date
-  }
-  thumbnailUrl?: string
-  teamName?: string
+    toDate: () => Date;
+  };
+  thumbnailUrl?: string;
+  teamName?: string;
   teamMembers?: {
-    name: string
-    role: string
-    githubLink?: string
-    portfolioLink?: string
-  }[]
-  techStack?: string[]
+    name: string;
+    role: string;
+    githubLink?: string;
+    portfolioLink?: string;
+  }[];
+  techStack?: string[];
 }
 
 interface Comment {
-  id: string
-  postId: string
-  content: string
+  id: string;
+  postId: string;
+  content: string;
   createdAt: {
-    toDate: () => Date
-  }
-  postTitle: string
+    toDate: () => Date;
+  };
+  postTitle: string;
   postCreatedAt?: {
-    toDate: () => Date
-  }
+    toDate: () => Date;
+  };
   author: {
-    name: string
-    email: string
-  }
-  likes: string[]
+    name: string;
+    email: string;
+  };
+  likes: string[];
 }
 
 interface UserData {
-  name: string
+  name: string;
   createdAt: {
-    toDate: () => Date
-  }
+    toDate: () => Date;
+  };
 }
 
 export default function MyPage() {
-  const [user, setUser] = useState<User | null>(null)
-  const [userData, setUserData] = useState<UserData | null>(null)
-  const [myPosts, setMyPosts] = useState<Post[]>([])
-  const [myComments, setMyComments] = useState<Comment[]>([])
-  const [likedPosts, setLikedPosts] = useState<Post[]>([])
+  const [user, setUser] = useState<User | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [myPosts, setMyPosts] = useState<Post[]>([]);
+  const [myComments, setMyComments] = useState<Comment[]>([]);
+  const [likedPosts, setLikedPosts] = useState<Post[]>([]);
   const [activeTab, setActiveTab] = useState<
     'posts' | 'comments' | 'likedPosts'
-  >('posts')
-  const [loading, setLoading] = useState(true)
-  const [displayedPosts, setDisplayedPosts] = useState<Post[]>([])
-  const [displayedComments, setDisplayedComments] = useState<Comment[]>([])
-  const [displayedLikedPosts, setDisplayedLikedPosts] = useState<Post[]>([])
-  const [showMorePosts, setShowMorePosts] = useState(false)
-  const [showMoreComments, setShowMoreComments] = useState(false)
-  const [showMoreLikedPosts, setShowMoreLikedPosts] = useState(false)
-  const router = useRouter()
+  >('posts');
+  const [loading, setLoading] = useState(true);
+  const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
+  const [displayedComments, setDisplayedComments] = useState<Comment[]>([]);
+  const [displayedLikedPosts, setDisplayedLikedPosts] = useState<Post[]>([]);
+  const [showMorePosts, setShowMorePosts] = useState(false);
+  const [showMoreComments, setShowMoreComments] = useState(false);
+  const [showMoreLikedPosts, setShowMoreLikedPosts] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
-        router.push('/login')
-        return
+        router.push('/login');
+        return;
       }
-      console.log('User authenticated:', user.email)
-      setUser(user)
+      console.log('User authenticated:', user.email);
+      setUser(user);
       if (user.email) {
-        await fetchUserData(user.email)
-        await fetchUserContent(user.email)
+        await fetchUserData(user.email);
+        await fetchUserContent(user.email);
       }
-    })
+    });
 
-    return () => unsubscribe()
-  }, [router])
+    return () => unsubscribe();
+  }, [router]);
 
   const fetchUserData = async (email: string) => {
     try {
-      const userRef = doc(db, 'users', email)
-      const userSnap = await getDoc(userRef)
+      const userRef = doc(db, 'users', email);
+      const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
-        setUserData(userSnap.data() as UserData)
+        setUserData(userSnap.data() as UserData);
       }
     } catch (error) {
-      console.error('사용자 정보 로딩 중 오류:', error)
+      console.error('사용자 정보 로딩 중 오류:', error);
     }
-  }
+  };
 
   const fetchUserContent = async (email: string) => {
     try {
-      console.log('Fetching content for user:', email)
+      console.log('Fetching content for user:', email);
 
       // 내가 작성한 게시물 가져오기 (서버 쿼리)
       const postsQuery = query(
         collection(db, 'posts'),
         where('author.email', '==', email),
         orderBy('createdAt', 'desc')
-      )
-      const postsSnapshot = await getDocs(postsQuery)
-      const postsMap = new Map<string, any>()
+      );
+      const postsSnapshot = await getDocs(postsQuery);
+      const postsMap = new Map<string, any>();
       const posts = postsSnapshot.docs.map((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         const composed = {
           id: doc.id,
           ...data,
@@ -139,25 +139,25 @@ export default function MyPage() {
           likes: data.likes || [],
           views: data.views || 0,
           author: data.author || { name: '알 수 없음', email },
-        } as Post
-        postsMap.set(doc.id, { id: doc.id, ...data })
-        return composed
-      })
+        } as Post;
+        postsMap.set(doc.id, { id: doc.id, ...data });
+        return composed;
+      });
 
-      console.log('Filtered posts:', posts.length)
-      setMyPosts(posts)
-      setDisplayedPosts(posts.slice(0, 9))
-      setShowMorePosts(posts.length > 9)
+      console.log('Filtered posts:', posts.length);
+      setMyPosts(posts);
+      setDisplayedPosts(posts.slice(0, 9));
+      setShowMorePosts(posts.length > 9);
 
       // 내가 좋아요한 게시물 (서버 쿼리)
       const likedQuery = query(
         collection(db, 'posts'),
         where('likes', 'array-contains', email),
         orderBy('createdAt', 'desc')
-      )
-      const likedSnapshot = await getDocs(likedQuery)
+      );
+      const likedSnapshot = await getDocs(likedQuery);
       const likedPosts = likedSnapshot.docs.map((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         return {
           id: doc.id,
           ...data,
@@ -165,27 +165,29 @@ export default function MyPage() {
           likes: data.likes || [],
           views: data.views || 0,
           author: data.author || { name: '알 수 없음', email },
-        } as Post
-      })
+        } as Post;
+      });
 
-      console.log('Filtered liked posts:', likedPosts.length)
-      setLikedPosts(likedPosts)
-      setDisplayedLikedPosts(likedPosts.slice(0, 9))
-      setShowMoreLikedPosts(likedPosts.length > 9)
+      console.log('Filtered liked posts:', likedPosts.length);
+      setLikedPosts(likedPosts);
+      setDisplayedLikedPosts(likedPosts.slice(0, 9));
+      setShowMoreLikedPosts(likedPosts.length > 9);
 
       // 내가 작성한 댓글 (서버 쿼리)
       const commentsQuery = query(
         collection(db, 'comments'),
         where('author.email', '==', email),
         orderBy('createdAt', 'desc')
-      )
-      const commentsSnapshot = await getDocs(commentsQuery)
+      );
+      const commentsSnapshot = await getDocs(commentsQuery);
       const comments = commentsSnapshot.docs
         .map((doc) => {
-          const comment = doc.data() as any
-          const postData = postsMap.get(comment.postId)
+          const comment = doc.data() as any;
+          const postData = postsMap.get(comment.postId);
           if (!postData) {
-            return null
+            // 게시물이 삭제되었거나 없는 경우
+            // 해당 댓글은 표시하지 않거나, "원본 게시물 없음" 등으로 처리할 수 있습니다.
+            return null;
           }
           return {
             id: doc.id,
@@ -196,47 +198,49 @@ export default function MyPage() {
             likes: comment.likes || [],
             postTitle: postData.title,
             postCreatedAt: postData.createdAt,
-          } as Comment
+          } as Comment;
         })
-        .filter((c): c is Comment => c !== null)
+        .filter((c): c is Comment => c !== null); // null 값 필터링
 
-      console.log('Filtered comments:', comments.length)
-      setMyComments(comments)
-      setDisplayedComments(comments.slice(0, 9))
-      setShowMoreComments(comments.length > 9)
+      console.log('Filtered comments:', comments.length);
+      setMyComments(comments);
+      setDisplayedComments(comments.slice(0, 9));
+      setShowMoreComments(comments.length > 9);
     } catch (error) {
-      console.error('컨텐츠 로딩 중 오류:', error)
+      console.error('컨텐츠 로딩 중 오류:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleLike = async (
     postId: string,
     currentLikes: string[],
     e: React.MouseEvent
   ) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!user || !user.email) {
-      toast.error('로그인이 필요합니다.')
-      router.push('/login')
-      return
+      toast.error('로그인이 필요합니다.');
+      router.push('/login');
+      return;
     }
 
     try {
-      const postRef = doc(db, 'posts', postId)
-      const isLiked = currentLikes.includes(user.email)
+      const postRef = doc(db, 'posts', postId);
+      const isLiked = currentLikes.includes(user.email);
 
       if (isLiked) {
         await updateDoc(postRef, {
           likes: arrayRemove(user.email),
-        })
+        });
+        toast.success('좋아요를 취소했습니다.');
       } else {
         await updateDoc(postRef, {
           likes: arrayUnion(user.email),
-        })
+        });
+        toast.success('게시물에 좋아요를 눌렀습니다!');
       }
 
       // 게시물 목록 업데이트
@@ -248,36 +252,55 @@ export default function MyPage() {
               likes: isLiked
                 ? post.likes.filter((email) => email !== user.email)
                 : [...post.likes, user.email!],
-            }
+            };
           }
-          return post
+          return post;
         })
-      )
+      );
+      setLikedPosts(
+        (prevPosts) =>
+          prevPosts
+            .map((post) => {
+              if (post.id === postId) {
+                return {
+                  ...post,
+                  likes: isLiked
+                    ? post.likes.filter((email) => email !== user.email)
+                    : [...post.likes, user.email!],
+                };
+              }
+              return post;
+            })
+            .filter(
+              (post) =>
+                activeTab !== 'likedPosts' || post.likes.includes(user.email!)
+            ) // '좋아요한 게시물' 탭일 때만 필터링
+      );
     } catch (error) {
-      console.error('좋아요 처리 중 오류:', error)
-      toast.error('좋아요 처리 중 오류가 발생했습니다.')
+      console.error('좋아요 처리 중 오류:', error);
+      toast.error('좋아요 처리 중 오류가 발생했습니다.');
     }
-  }
+  };
 
   const handleView = async (postId: string) => {
     try {
-      const postRef = doc(db, 'posts', postId)
+      const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
         views: increment(1),
-      })
+      });
 
-      // 게시물 목록 업데이트
+      // 게시물 목록 업데이트 (조회수 즉시 반영)
       setMyPosts((prevPosts) =>
         prevPosts.map((post) => {
           if (post.id === postId) {
             return {
               ...post,
               views: (post.views || 0) + 1,
-            }
+            };
           }
-          return post
+          return post;
         })
-      )
+      );
 
       setLikedPosts((prevPosts) =>
         prevPosts.map((post) => {
@@ -285,37 +308,41 @@ export default function MyPage() {
             return {
               ...post,
               views: (post.views || 0) + 1,
-            }
+            };
           }
-          return post
+          return post;
         })
-      )
+      );
     } catch (error) {
-      console.error('조회수 증가 중 오류:', error)
+      console.error('조회수 증가 중 오류:', error);
     }
-  }
+  };
 
   const handleShowMorePosts = () => {
-    setDisplayedPosts(myPosts)
-    setShowMorePosts(false)
-  }
+    setDisplayedPosts(myPosts);
+    setShowMorePosts(false);
+  };
 
   const handleShowMoreComments = () => {
-    setDisplayedComments(myComments)
-    setShowMoreComments(false)
-  }
+    setDisplayedComments(myComments);
+    setShowMoreComments(false);
+  };
 
   const handleShowMoreLikedPosts = () => {
-    setDisplayedLikedPosts(likedPosts)
-    setShowMoreLikedPosts(false)
-  }
+    setDisplayedLikedPosts(likedPosts);
+    setShowMoreLikedPosts(false);
+  };
+
+  const handleEditNameClick = () => {
+    router.push('/edit-name'); // 이름 변경 페이지 경로로 이동
+  };
 
   if (loading) {
-    return <div className={styles.loading}>로딩 중...</div>
+    return <div className={styles.loading}>로딩 중...</div>;
   }
 
   if (!user || !userData) {
-    return null
+    return null;
   }
 
   return (
@@ -323,6 +350,13 @@ export default function MyPage() {
       <div className={styles.profileSection}>
         <div className={styles.profileInfo}>
           <h1 className={styles.userName}>{userData.name}</h1>
+          {/* 이름 변경 버튼 추가 */}
+          <button
+            className={styles.editNameButton}
+            onClick={handleEditNameClick}
+          >
+            이름 변경
+          </button>
           <p className={styles.joinDate}>
             가입일: {userData.createdAt.toDate().toLocaleDateString()}
           </p>
@@ -391,13 +425,13 @@ export default function MyPage() {
                           (() => {
                             const professors = post.teamMembers.filter(
                               (member) => member.role === '지도교수'
-                            )
+                            );
                             return professors.length > 0 ? (
                               <span>
                                 지도교수:{' '}
                                 {professors.map((p) => p.name).join(', ')}
                               </span>
-                            ) : null
+                            ) : null;
                           })()}
                         {post.techStack && post.techStack.length > 0 && (
                           <div className={styles.techStackContainer}>
@@ -552,13 +586,13 @@ export default function MyPage() {
                           (() => {
                             const professors = post.teamMembers.filter(
                               (member) => member.role === '지도교수'
-                            )
+                            );
                             return professors.length > 0 ? (
                               <span>
                                 지도교수:{' '}
                                 {professors.map((p) => p.name).join(', ')}
                               </span>
-                            ) : null
+                            ) : null;
                           })()}
                         {post.techStack && post.techStack.length > 0 && (
                           <div className={styles.techStackContainer}>
@@ -630,5 +664,5 @@ export default function MyPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
