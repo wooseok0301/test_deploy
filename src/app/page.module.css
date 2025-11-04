@@ -1141,10 +1141,6 @@
     padding: 6px;
   }
 }
-body {
-  overflow-x: hidden; /* Prevents horizontal scrolling on the root elements */
-  width: 100%; /* Ensures they always take 100% of the viewport width */
-}
 
 /* Also ensure no element is causing an overflow */
 * {
