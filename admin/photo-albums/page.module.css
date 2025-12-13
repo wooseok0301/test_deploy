@@ -1,0 +1,320 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #0056b3;
+}
+
+.backButton {
+  background-color: #6c757d;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: #5a6268;
+}
+
+.addSection, .listSection, .manageEntriesSection {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.addSection h2, .listSection h2, .manageEntriesSection h2 {
+  font-size: 1.8rem;
+  color: #0056b3;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.addForm, .addEntryForm {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.input, .textareaInput { /* input과 textarea 모두 적용 */
+  flex: 1;
+  min-width: 250px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+  resize: vertical; /* textarea만 세로 사이즈 조절 가능하게 */
+}
+
+/* AddEntryForm의 textarea가 전체 너비를 차지하도록 */
+.addEntryForm .textareaInput {
+  flex: 1 1 100%;
+  min-width: unset;
+}
+
+
+.addButton {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.addButton:hover {
+  background-color: #218838;
+}
+
+.noData {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  padding: 20px 0;
+}
+
+/* Year Selection Grid */
+.yearSelectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.yearItem {
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: #495057;
+}
+
+.yearItem:hover {
+  background-color: #e9ecef;
+  border-color: #c9d0d6;
+}
+
+.yearItem.selectedYear {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.yearItem.selectedYear:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.deleteButtonSmall {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButtonSmall:hover {
+  background-color: #c82333;
+}
+
+/* Photo Entry List */
+.photoEntryList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.photoEntryItem {
+  background-color: #fefefe;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.entryInfo {
+  display: flex;
+  flex-direction: column; /* 세로 정렬 유지 */
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.entryDetails {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* 링크와 제목 사이 간격 */
+}
+
+.entryTitle {
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.entryLinksContainer {
+    display: flex;
+    flex-direction: column; /* 여러 링크를 세로로 나열 */
+    gap: 5px;
+}
+
+.entryLink {
+  color: #007bff;
+  text-decoration: none;
+  word-break: break-all;
+  font-size: 0.95rem; /* 개별 링크 크기 */
+  border-bottom: 1px dashed #cfe2ff; /* 시각적 구분 */
+  padding-bottom: 3px;
+}
+
+.entryLink:hover {
+  text-decoration: underline;
+}
+
+.entryActions, .editButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: auto; /* Buttons stick to the bottom */
+}
+
+.editButton, .saveButton {
+  background-color: #ffc107;
+  color: #333;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1; /* Make buttons take equal width */
+}
+
+.editButton:hover, .saveButton:hover {
+  background-color: #e0a800;
+}
+
+.cancelButton {
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1; /* Make buttons take equal width */
+}
+
+.cancelButton:hover {
+  background-color: #5a6268;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex: 1; /* Make buttons take equal width */
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* Enhanced Edit Entry Form Styles */
+.editEntryForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between inputs and buttons */
+  width: 100%;
+  padding: 10px; /* Add some padding inside the edit form */
+  border: 1px dashed #007bff; /* Visual cue for edit mode */
+  border-radius: 5px;
+  background-color: #e6f2ff; /* Light blue background for edit mode */
+}
+
+.editEntryForm .textareaInput { /* input 대신 textareaInput 사용 */
+  width: 100%; /* Ensure inputs take full width within the edit form */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  margin-bottom: 5px; /* Small gap between inputs */
+}
+
+.editButtons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.editButtons .saveButton,
+.editButtons .cancelButton {
+  flex: 1; /* Make save and cancel buttons share space equally */
+  font-size: 0.95rem; /* Slightly smaller font for edit buttons */
+}
+
+/* Adjustments for Photo Entry List items when not in edit mode */
+.photoEntryItem:not(.editing) .entryInfo {
+  flex-direction: column; /* 기존처럼 세로 정렬 유지 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+.photoEntryItem:not(.editing) .entryActions {
+  flex-direction: row; /* 버튼을 가로로 배열 */
+  gap: 5px;
+  white-space: nowrap; /* 버튼이 줄바꿈되지 않도록 */
+  width: 100%; /* 버튼이 부모 너비에 맞게 */
+  justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
+}
+
+.photoEntryItem.editing {
+  border: 2px solid #007bff; /* Stronger border for the actively edited item */
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.5rem;
+  color: #0056b3;
+}

@@ -1,0 +1,58 @@
+.container {
+  width: 100%;
+  margin: 1rem 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.viewerContainer {
+  position: relative;
+  background-color: #f5f5f5;
+  min-height: 500px;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.error {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  border: 1px solid #ffcdd2;
+}
+
+/* PPT 뷰어 컨트롤 스타일 */
+.viewerContainer :global(.pptx-viewer-controls) {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+.viewerContainer :global(.pptx-viewer-slide) {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.viewerContainer :global(.pptx-viewer-slide-number) {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.5rem;
+}
