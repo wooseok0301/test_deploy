@@ -1,4 +1,3 @@
-/* 전체 페이지 레이아웃을 위한 래퍼 */
 .pageWrapper {
   min-height: calc(100vh - 200px);
   display: flex;
@@ -143,4 +142,103 @@
   text-align: center;
   margin-top: 15px;
   color: #666;
+}
+
+/* --- Mobile Environment CSS --- */
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 15px; /* Reduce overall padding */
+  }
+
+  .container {
+    width: 95%; /* Make container nearly full width */
+    max-width: 450px; /* Set a max-width to prevent it from getting too wide on tablets */
+    padding: 30px; /* Reduce internal padding */
+    min-height: 400px; /* Adjust min-height if necessary */
+  }
+
+  .title {
+    font-size: 24px; /* Slightly smaller title */
+    margin-bottom: 25px;
+  }
+
+  .form {
+    padding: 20px; /* Reduce form padding */
+    gap: 15px; /* Reduce gap between form elements */
+  }
+
+  .input {
+    padding: 12px; /* Smaller padding for inputs */
+    font-size: 15px; /* Slightly smaller font size for inputs */
+  }
+
+  .button {
+    padding: 12px; /* Smaller padding for buttons */
+    font-size: 15px; /* Slightly smaller font size for buttons */
+  }
+
+  .emailRow {
+    flex-direction: column; /* Stack email input and verify button vertically */
+    gap: 10px; /* Gap between stacked elements */
+  }
+
+  .verifyButton {
+    width: 100%; /* Make verify button full width when stacked */
+    padding: 12px 20px; /* Adjust padding */
+    font-size: 14px; /* Keep font size consistent */
+  }
+
+  .error,
+  .success,
+  .info {
+    font-size: 13px; /* Slightly smaller text for messages */
+  }
+
+  .eyeIcon {
+    font-size: 18px; /* Slightly smaller icon */
+  }
+}
+
+@media (max-width: 480px) {
+  .pageWrapper {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%; /* Full width on very small screens */
+    padding: 20px; /* Further reduce padding */
+    min-height: unset; /* Allow height to adjust naturally */
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .verifyButton {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+
+  .error,
+  .success,
+  .info {
+    font-size: 12px;
+  }
 }

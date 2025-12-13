@@ -858,3 +858,130 @@
     height: auto;
   }
 }
+@media (max-width: 480px) {
+  .yearSelector {
+    padding: 0 0.5rem;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+  .yearButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border-width: 1px; /* Thinner border for smaller buttons */
+  }
+  .photoAlbumLinkItem {
+    width: 140px; /* Further adjust width for very small screens */
+    height: 110px;
+    margin: 0 6px; /* Adjust spacing between items */
+  }
+  .photoAlbumScrollTrack {
+    animation-duration: 15s; /* Even faster scroll on very small mobile */
+    padding: 8px 0;
+  }
+  .photoAlbumLinksSection {
+    padding: 0.8rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .photoAlbumSectionTitle {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .photoAlbumLinkText {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+  .postsGrid {
+    max-width: 100%;
+    gap: 15px;
+    padding: 0 10px;
+  }
+  .card {
+    min-height: auto; /* Remove min-height to allow content to dictate height */
+    height: auto;
+    max-width: 320px; /* Constrain card width on very small screens */
+    margin: 0 auto;
+  }
+  .imageContainer {
+    height: 160px; /* Adjust image height for smaller cards */
+    padding-bottom: 0;
+  }
+  .cardContent {
+    padding: 10px;
+    gap: 5px;
+  }
+  .cardContent h3 {
+    font-size: 1rem;
+    min-height: 2.2em;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+  }
+  .cardInfo {
+    font-size: 11px;
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+  .techStackContainer {
+    min-height: 15px;
+  }
+  .techStackList {
+    gap: 3px;
+  }
+  .techStackItem,
+  .techStackMore {
+    font-size: 8px;
+    padding: 1px 4px;
+  }
+  .cardMeta {
+    padding-top: 8px;
+    font-size: 11px;
+  }
+  .cardStats {
+    gap: 8px;
+  }
+  .likeButton {
+    padding: 3px;
+  }
+  .heartIcon {
+    width: 14px;
+    height: 14px;
+  }
+  .views {
+    font-size: 10px;
+  }
+  .createdAt {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+  .metaHeader {
+    padding-top: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  .metaTitle {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  .metaInfoCards {
+    gap: 8px;
+    padding: 0 0.5rem;
+  }
+  .metaInfoCard {
+    width: 100%;
+    max-width: 300px; /* Further constrain width for very small screens */
+    padding: 0.8rem;
+  }
+  .metaInfoCardLabel {
+    font-size: 0.8rem;
+  }
+  .metaInfoCardValue {
+    font-size: 0.9rem;
+  }
+  .noPostsMessage {
+    padding: 2rem 0.8rem;
+    font-size: 1rem;
+  }
+  .title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+}

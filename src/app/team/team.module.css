@@ -123,3 +123,22 @@
     margin: 0 auto;
   }
 }
+@media (max-width: 480px) {
+  .container {
+    padding: 40px 15px; /* Reduced padding for smaller screens */
+  }
+
+  .title {
+    font-size: 1.8rem; /* Smaller title font size */
+    margin-bottom: 30px;
+  }
+
+  .teamContainer {
+    grid-template-columns: 1fr; /* Changes to a single column layout */
+  }
+
+  .personCard {
+    max-width: 300px; /* Limits card width */
+    margin: 0 auto; /* Centers individual cards */
+  }
+}

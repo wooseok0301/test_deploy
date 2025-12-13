@@ -1141,3 +1141,163 @@
     padding: 6px;
   }
 }
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .contentColumnsWrapper {
+    padding: 0;
+    gap: 15px;
+  }
+
+  .mainContent {
+    padding: 0;
+  }
+
+  .postsGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 100%;
+    padding: 0 5px;
+  }
+
+  .card {
+    min-height: auto;
+    height: auto;
+    margin: 0 auto;
+    max-width: 350px;
+  }
+
+  .imageContainer {
+    height: 180px;
+  }
+
+  .cardContent {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .cardContent h3 {
+    font-size: 1rem;
+    min-height: 2.2em;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+  }
+
+  .cardInfo {
+    font-size: 12px;
+    gap: 3px;
+    margin-bottom: 5px;
+  }
+
+  .techStackContainer {
+    min-height: 15px;
+  }
+
+  .techStackList {
+    gap: 4px;
+  }
+
+  .techStackItem,
+  .techStackMore {
+    font-size: 9px;
+    padding: 1px 5px;
+  }
+
+  .cardMeta {
+    padding-top: 8px;
+    font-size: 12px;
+  }
+
+  .cardStats {
+    gap: 10px;
+  }
+
+  .likeButton {
+    padding: 4px;
+  }
+
+  .heartIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .views {
+    font-size: 11px;
+  }
+
+  .createdAt {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .imagePlaceholder {
+    font-size: 1rem;
+  }
+
+  .rightBanner {
+    display: none;
+  }
+
+  .loadMoreContainer {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .loadMoreSmallButton {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  /* Popup specific adjustments for extremely small screens */
+  .popupContent {
+    padding: 5px;
+    gap: 2px;
+    max-width: 98%;
+    max-height: 90vh;
+  }
+
+  .popupHeader {
+    padding: 5px 0;
+    margin-bottom: 5px;
+  }
+
+  .popupTitle {
+    font-size: 1rem;
+    margin-bottom: 2px;
+    padding: 0 5px;
+  }
+
+  .popupDescription {
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+    padding: 0 5px;
+  }
+
+  .popupContent a {
+    margin-bottom: 4px;
+    padding-bottom: calc( (1229 / 1739) * 100% * 0.7 );
+  }
+
+  .popupNavButtonLeft,
+  .popupNavButtonRight {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    top: 30%;
+    left: 1px;
+    right: 1px;
+    padding: 0;
+  }
+
+  .popupActions {
+    gap: 4px;
+    padding-top: 5px;
+  }
+
+  .popupActions button {
+    font-size: 0.65rem;
+    padding: 5px;
+  }
+}
